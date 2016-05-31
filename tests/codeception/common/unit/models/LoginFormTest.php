@@ -2,10 +2,12 @@
 
 namespace tests\codeception\common\unit\models;
 
+use backend\modules\user\models\forms\LoginForm;
+use tests\codeception\common\fixtures\AuthAssignmentFixture;
+use tests\codeception\common\fixtures\AuthItemFixture;
 use Yii;
 use tests\codeception\common\unit\DbTestCase;
 use Codeception\Specify;
-use common\models\LoginForm;
 use tests\codeception\common\fixtures\UserFixture;
 
 /**
@@ -88,6 +90,14 @@ class LoginFormTest extends DbTestCase
                 'class' => UserFixture::className(),
                 'dataFile' => '@tests/codeception/common/unit/fixtures/data/models/user.php'
             ],
+			'authItem'       => [
+				'class'    => AuthItemFixture::className(),
+				'dataFile' => '@tests/codeception/common/fixtures/data/auth_item.php',
+			],
+			'authAssignment' => [
+				'class'    => AuthAssignmentFixture::className(),
+				'dataFile' => '@tests/codeception/common/fixtures/data/auth_assignment.php',
+			],
         ];
     }
 }
