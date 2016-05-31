@@ -25,6 +25,8 @@ class User extends ActiveRecord implements IdentityInterface
 {
 	const STATUS_deleted_at = 0;
 	const STATUS_ACTIVE = 10;
+	//register
+	const SCENARIO_REGISTER = 'register';
 
 	/**
 	 * @inheritdoc
@@ -114,6 +116,7 @@ class User extends ActiveRecord implements IdentityInterface
 		return [
 			['status', 'default', 'value' => self::STATUS_ACTIVE],
 			['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_deleted_at]],
+			[['username','password_hash','email','auth_key'],'safe','on' => self::SCENARIO_REGISTER]
 		];
 	}
 

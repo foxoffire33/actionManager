@@ -3,6 +3,8 @@
 namespace common\models;
 
 use Yii;
+//use yii\db\ActiveRecord;
+use common\components\db\ActiveRecord;
 
 /**
  * This is the model class for table "organization".
@@ -24,7 +26,7 @@ use Yii;
  * @property User $updatedBy
  * @property User $createdBy
  */
-class Organization extends \common\components\db\ActiveRecord
+class Organization extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -40,7 +42,7 @@ class Organization extends \common\components\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'address', 'postal', 'city', 'logo', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'required'],
+            [['name', 'address', 'city', 'logo','organization_user'], 'required'],
             [['description'], 'string'],
             [['created_at', 'updated_at', 'created_by', 'updated_by', 'deleted_at'], 'integer'],
             [['name', 'address', 'city', 'logo'], 'string', 'max' => 128],

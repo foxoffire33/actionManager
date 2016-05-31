@@ -13,8 +13,8 @@ class m160531_084551_createDB extends Migration
         $this->defaultFields = [
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
-            'created_by' => $this->integer(11)->notNull(),
-            'updated_by' => $this->integer(11)->notNull(),
+            'created_by' => $this->integer(11),
+            'updated_by' => $this->integer(11),
             'deleted_at' => $this->integer()
         ];
     }
@@ -28,6 +28,7 @@ class m160531_084551_createDB extends Migration
             'postal' => $this->string(6)->notNull(),
             'city' => $this->string(128)->notNull(),
             'logo' => $this->string(128)->notNull(),
+            'organization_user' => $this->integer(11),
             'description' => $this->binary(),
         ], $this->defaultFields));
 
@@ -59,14 +60,15 @@ class m160531_084551_createDB extends Migration
             'action_field_id' => $this->integer()->notNull(),
             'value' => $this->text()->notNull(),
             'ip' => $this->string(36),//IPV6 is 8 X 4 plus : er tussen
-            'created_at' => $this->integer()->notNull(),
+            'created_at' => $this->integer(),
             'updated_at' => $this->integer()->notNull(),
+            'deleted_at' => $this->integer(),
             'deleted_at' => $this->integer()
         ]);
 
         //organization
-        $this->addForeignKey('organization_created_by_fk','organization','created_by','user','id','CASCADE','NO ACTION');
-        $this->addForeignKey('organization_updated_by_fk','organization','updated_by','user','id','CASCADE','NO ACTION');
+       // $this->addForeignKey('organization_created_by_fk','organization','created_by','user','id','CASCADE','NO ACTION');
+        $this->addForeignKey('organization_user_id_fk','organization','organization_user','user','id','CASCADE','NO ACTION');
         //action
         $this->addForeignKey('action_created_by_fk','action','created_by','user','id','CASCADE','NO ACTION');
         $this->addForeignKey('action_updated_by_fk','action','updated_by','user','id','CASCADE','NO ACTION');
