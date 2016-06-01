@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\components\helpers\FileHelper;
 use Yii;
 
 /**
@@ -44,14 +45,13 @@ class Action extends \common\components\db\ActiveRecord
     public function rules()
     {
         return [
-            [['organization_id', 'created_at', 'updated_at', 'created_by', 'updated_by', 'deleted_at'], 'integer'],
-            [['name', 'intro', 'description', 'image', 'image_facebook', 'description_facebook', 'image_twitter', 'description_twitter', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'required'],
+            ['organization_id', 'default', 'value' => Organization::findOne(['organization_user' => Yii::$app->user->id])->id],
+            [['name', 'intro', 'description', 'description_twitter'], 'required'],
             [['description', 'description_facebook', 'description_twitter'], 'string'],
             [['name', 'image', 'image_facebook', 'image_twitter'], 'string', 'max' => 128],
             [['intro'], 'string', 'max' => 255],
-            [['organization_id'], 'exist', 'skipOnError' => true, 'targetClass' => Organization::className(), 'targetAttribute' => ['organization_id' => 'id']],
-            [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
-            [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
+            [['image', 'image_facebook', 'image_twitter'], 'file', 'extensions' => ['jpg', 'jpeg', 'png'], 'skipOnError' => true],
+            [['image', 'image_facebook', 'image_twitter'], 'file', 'skipOnEmpty' => true]
         ];
     }
 

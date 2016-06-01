@@ -28,6 +28,8 @@ use common\components\db\ActiveRecord;
  */
 class Organization extends ActiveRecord
 {
+
+    public $logo_virtual;
     /**
      * @inheritdoc
      */
@@ -42,13 +44,14 @@ class Organization extends ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'address', 'city', 'logo','organization_user'], 'required'],
+            [['name', 'address', 'city','organization_user','logo'], 'required'],
             [['description'], 'string'],
             [['created_at', 'updated_at', 'created_by', 'updated_by', 'deleted_at'], 'integer'],
             [['name', 'address', 'city', 'logo'], 'string', 'max' => 128],
             [['postal'], 'string', 'max' => 6],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
+            ['logo','file']
         ];
     }
 
@@ -95,5 +98,14 @@ class Organization extends ActiveRecord
     public function getCreatedBy()
     {
         return $this->hasOne(User::className(), ['id' => 'created_by']);
+    }
+
+    public function getOrganizationUser(){
+        return $this->hasOne(User::className(),['id' => 'organization_user']);
+    }
+
+    public function getLogoBase64(){
+        $image = Yii::getAlias('@uploadPath').'/'.$this->logo;
+        return 'data: '.mime_content_type($image).';base64,'.base64_encode(file_get_contents($image));
     }
 }

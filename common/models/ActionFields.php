@@ -25,6 +25,8 @@ use Yii;
  */
 class ActionFields extends \common\components\db\ActiveRecord
 {
+    const TYPE_TEXT = 0;
+    const TYPE_CHECKBOX = 1;
     /**
      * @inheritdoc
      */
@@ -39,12 +41,11 @@ class ActionFields extends \common\components\db\ActiveRecord
     public function rules()
     {
         return [
-            [['action_id', 'required', 'type', 'created_at', 'updated_at', 'created_by', 'updated_by', 'deleted_at'], 'integer'],
-            [['created_at', 'updated_at', 'created_by', 'updated_by'], 'required'],
+            [['action_id', 'required', 'type'], 'integer'],
+            ['required','default','value' => true],
+            [['name', 'label', 'type'], 'required'],
             [['label'], 'string', 'max' => 128],
             [['action_id'], 'exist', 'skipOnError' => true, 'targetClass' => Action::className(), 'targetAttribute' => ['action_id' => 'id']],
-            [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
-            [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
         ];
     }
 

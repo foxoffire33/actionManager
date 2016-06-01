@@ -49,6 +49,7 @@ class m160531_084551_createDB extends Migration
 
         $this->createTable('action_fields',ArrayHelper::merge([
             'id' => $this->primaryKey(11),
+            'name' => $this->string(128),
             'action_id' => $this->integer(11),
             'label' => $this->string(128),
             'required' => $this->boolean()->defaultValue(false)->notNull(),

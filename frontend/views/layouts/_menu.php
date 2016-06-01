@@ -19,8 +19,9 @@ echo Nav::widget([
 	'options' => ['class' => 'navbar-nav navbar-right'],
 	'items'   => [
 		['label' => Yii::t('menu', 'Home'), 'url' => ['/site/index']],
-		['label' => Yii::t('menu', 'About'), 'url' => ['/site/about']],
 		['label' => Yii::t('menu', 'Contact'), 'url' => ['/site/contact']],
+		['label' => Yii::t('menu','Register'),'url' => ['/user/registration']],
+		['label' => Yii::t('menu','Login'),'url' => ['/user/login']]
 	],
 ]);
 NavBar::end();

@@ -11,7 +11,7 @@ use yii\filters\VerbFilter;
  */
 class Controller extends \yii\web\Controller
 {
-	public function behaviors()
+	/*public function behaviors()
 	{
 		return [
 			'access' => [
@@ -19,7 +19,7 @@ class Controller extends \yii\web\Controller
 				'rules' => [
 					[
 						'allow' => true,
-						'roles' => ['?'],
+						'roles' => ['*'],
 					],
 				],
 			],
@@ -30,6 +30,6 @@ class Controller extends \yii\web\Controller
 				],
 			],
 		];
-	}
+	}*/
 
 }
