@@ -41,10 +41,16 @@ class SignupForm extends Model
             ['username', 'unique', 'targetClass' => User::className(), 'targetAttribute' => 'username'],
             ['name', 'unique', 'targetClass' => Organization::className(), 'targetAttribute' => 'name'],
             //safe
-            [['description'], 'safe'],
+            [['description','logo'], 'safe'],
             //save logo
-            ['logo', 'file', 'extensions' => ['jpg', 'jpeg', 'png'], 'skipOnError' => false],
+            ['logo', 'file', 'extensions' => ['jpg', 'jpeg', 'png'],'skipOnEmpty' => false],
         ];
+    }
+
+    public function beforeValidate()
+    {
+        $this->logo = UploadedFile::getInstance($this, 'logo');
+        return parent::beforeValidate();
     }
 
     public function save()
@@ -60,7 +66,6 @@ class SignupForm extends Model
                 'description' => $this->description
             ]);
             //save uploaded file
-            $this->logo = UploadedFile::getInstance($this, 'logo');
             $saveName = $this->getnewLogoName(rand(1000, 9000), $this->logo->extension);
             if ($this->logo->saveAs(Yii::getAlias('@uploadPath') . '/' . $saveName)) {
                 $organization->logo = $saveName;
