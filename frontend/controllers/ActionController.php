@@ -115,26 +115,6 @@ class ActionController extends Controller
 
     private function upload($model)
     {
-        if (!empty($model->image)) {
-            $model->image = UploadedFile::getInstance($model, 'image');
-            $imageRedom = FileHelper::redomName($model->image->baseName, $model->image->extension);
-            $model->image->saveAs($imageRedom);
-            $model->image = array_pop((array_slice(explode('/', $imageRedom), -1)));
-        }
-
-        if ($model->image_facebook) {
-            $model->image_facebook = UploadedFile::getInstance($model, 'image_facebook');
-            $imageFacebookRedom = FileHelper::redomName($model->image_facebook->baseName, $model->image_facebook->extension);
-            $model->image_facebook->saveAs($imageFacebookRedom);
-            $model->image_facebook = array_pop((array_slice(explode('/', $imageFacebookRedom), -1)));
-        }
-
-        if ($model->image_twitter) {
-            $model->image_twitter = UploadedFile::getInstance($model, 'image_twitter');
-            $imageTwitterRedom = FileHelper::redomName($model->image_twitter->baseName, $model->image_twitter->extension);
-            $model->image_twitter->saveAs($imageTwitterRedom);
-            $model->image_twitter = array_pop((array_slice(explode('/', $imageTwitterRedom), -1)));
-        }
         return $model;
     }
 

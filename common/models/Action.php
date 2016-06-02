@@ -2,8 +2,8 @@
 
 namespace common\models;
 
-use common\components\helpers\FileHelper;
 use Yii;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "action".
@@ -31,12 +31,56 @@ use Yii;
  */
 class Action extends \common\components\db\ActiveRecord
 {
+    const SCENARIO_UPDATE = 'update';
+
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
         return 'action';
+    }
+
+    public function beforeValidate()
+    {
+        if ($this->scenario == self::SCENARIO_UPDATE) {
+            if (!is_null(($image = UploadedFile::getInstance($this, 'image')))) {
+                $this->image = $image;
+            }
+            if (!is_null(($image_facebook = UploadedFile::getInstance($this, 'image_facebook')))) {
+                $this->image_facebook = $image_facebook;
+            }
+            if (!is_null(($image_twitter = UploadedFile::getInstance($this, 'image_twitter')))) {
+                $this->image_twitter = $image_twitter;
+            }
+        }
+    }
+
+    public function beforeSave($insert)
+    {
+        if (!is_string($this->image)) {
+            $this->image = $this->upload($this->image);
+        }
+        if (!is_string($this->image_facebook)) {
+            $this->image_facebook = $this->upload($this->image_facebook);
+        }
+        if (!is_string($this->image_twitter)) {
+            $this->image_twitter = $this->upload($this->image_twitter);
+        }
+        return parent::beforeSave($insert);
+    }
+
+    public function upload($imageFile)
+    {
+        $imageRedom = FileHelper::redomName($imageFile->baseName, $imageFile->extension);
+        $imageFile->saveAs($imageRedom);
+        return array_pop((array_slice(explode('/', $imageRedom), -1)));
+    }
+
+
+    public function beforeValidate()
+    {
+        return parent::beforeValidate();
     }
 
     /**
@@ -50,8 +94,8 @@ class Action extends \common\components\db\ActiveRecord
             [['description', 'description_facebook', 'description_twitter'], 'string'],
             [['name', 'image', 'image_facebook', 'image_twitter'], 'string', 'max' => 128],
             [['intro'], 'string', 'max' => 255],
-            [['image', 'image_facebook', 'image_twitter'], 'file', 'extensions' => ['jpg', 'jpeg', 'png'], 'skipOnError' => true],
-            [['image', 'image_facebook', 'image_twitter'], 'file', 'skipOnEmpty' => true]
+            [['image', 'image_facebook', 'image_twitter'], 'file', 'extensions' => ['jpg', 'jpeg', 'png'], 'skipOnError' => false],
+            [['image', 'image_facebook', 'image_twitter'], 'file', 'skipOnEmpty' => true, 'on' => self::SCENARIO_UPDATE]
         ];
     }
 
