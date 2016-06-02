@@ -41,11 +41,11 @@ class ActionFields extends \common\components\db\ActiveRecord
     public function rules()
     {
         return [
-            [['action_id', 'required', 'type'], 'integer'],
+            [['name','label','type','required'],'required'],
+            [['required', 'type'], 'integer'],
             ['required','default','value' => true],
-            [['name', 'label', 'type'], 'required'],
-            [['label'], 'string', 'max' => 128],
-            [['action_id'], 'exist', 'skipOnError' => true, 'targetClass' => Action::className(), 'targetAttribute' => ['action_id' => 'id']],
+            [['label','name'], 'string', 'max' => 128],
+            //[['action_id'], 'exist', 'skipOnError' => true, 'targetClass' => Action::className(), 'targetAttribute' => ['action_id' => 'id']],
         ];
     }
 

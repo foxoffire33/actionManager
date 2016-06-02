@@ -37,6 +37,7 @@ return [
 			'showScriptName'  => false,
 			'rules'           => [
 				'page/<slug:[-a-zA-Z]+>' => 'page/view',
+				'<id:[0-9+]>' => 'action/landing-page'
 			]
 		],
 		'errorHandler' => [

@@ -56,12 +56,12 @@ use yii\widgets\ActiveForm;
                 <?php if (empty($actionFields)): ?>
                     <?php $actionFields[] = new ActionFields() ?>
                 <?php endif; ?>
+                <?php $index = 0; ?>
                 <?php foreach ($actionFields as $actionField): ?>
-                    <?php $index = 0; ?>
                     <tr>
-                        <td><?= $form->field($actionField, 'name')->textInput(['name' => "ActionFields[$index]['name']"])->label(false); ?></td>
+                        <td><?= $form->field($actionField, 'name')->textInput(['name' => "ActionFields[$index][name]"])->label(false); ?></td>
                         <td><?= $form->field($actionField, 'label')->textInput(['name' => "ActionFields[$index][label]"])->label(false); ?></td>
-                        <td><?= $form->field($actionField, 'type')->dropDownList([ActionFields::TYPE_TEXT => Yii::t('actionFields', 'Text'), ActionFields::TYPE_CHECKBOX => Yii::t('actionFields', 'Checkbox')], ['name' => "ActionFields[$index]['type']"])->label(false) ?></td>
+                        <td><?= $form->field($actionField, 'type')->dropDownList([ActionFields::TYPE_TEXT => Yii::t('actionFields', 'Text'), ActionFields::TYPE_CHECKBOX => Yii::t('ActionFields', 'Checkbox')], ['name' => "ActionFields[$index][type]"])->label(false) ?></td>
                         <td><?= $form->field($actionField, 'required', ['template' => '{input}'])->checkBox(['name' => "ActionFields[$index][required]"], false); ?></td>
                         <td><?= $form->field($actionField, 'id')->hiddenInput(['name' => "ActionFields[$index][id]"])->label(false) ?>
                             <?= Html::a('<span class="glyphicon glyphicon-trash"></span>', '#', ['class' => 'remove-invoice-line']) ?></td>

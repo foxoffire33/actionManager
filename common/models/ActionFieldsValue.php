@@ -33,12 +33,10 @@ class ActionFieldsValue extends \common\components\db\ActiveRecord
     public function rules()
     {
         return [
-            [['reaction_id', 'action_field_id', 'value', 'created_at', 'updated_at'], 'required'],
-            [['reaction_id', 'action_field_id', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
             [['value'], 'string'],
             [['ip'], 'string', 'max' => 36],
             [['reaction_id'], 'unique'],
-            [['action_field_id'], 'exist', 'skipOnError' => true, 'targetClass' => ActionFields::className(), 'targetAttribute' => ['action_field_id' => 'id']],
+          //  [['action_field_id'], 'exist', 'skipOnError' => true, 'targetClass' => ActionFields::className(), 'targetAttribute' => ['action_field_id' => 'id']],
         ];
     }
 
