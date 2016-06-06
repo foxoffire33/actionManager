@@ -12,9 +12,9 @@ use yii\base\DynamicModel;
 use yii\base\Model;
 use yii\db\Expression;
 use yii\db\Query;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Inflector;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -29,6 +29,20 @@ class ActionController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['landing-page'],
+                        'allow' => true,
+                    ],
+                    [
+                        'actions' => ['update', 'create', 'view', 'delete', 'index'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ]
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -159,7 +173,7 @@ class ActionController extends Controller
             $this->view->params['organization_logo'] = ImageHelper::convertToBase64($model->organization->logo);
             $this->view->params['organization_name'] = ucfirst($model->organization->name);
             $landingPageModel = $this->setupDynapmicModel($model->actionFields);
-            if($landingPageModel->load(Yii::$app->request->post()) && $landingPageModel->validate()){
+            if ($landingPageModel->load(Yii::$app->request->post()) && $landingPageModel->validate()) {
 
                 $query = new Query();
                 $queryResult = $query->select('reaction_id')->orderBy('reaction_id DESC')->from(ActionFieldsValue::tableName())->one();
@@ -167,7 +181,7 @@ class ActionController extends Controller
                 foreach ($landingPageModel->attributes() as $attribute) {
                     $newActionFieldValue = new ActionFieldsValue();
                     $newActionFieldValue->reaction_id = $result;
-                    $newActionFieldValue->action_field_id = ActionFields::findOne(['action_id' => $id,'label' => $attribute])->id;
+                    $newActionFieldValue->action_field_id = ActionFields::findOne(['action_id' => $id, 'label' => $attribute])->id;
                     $newActionFieldValue->value = $landingPageModel->$attribute;
                     $newActionFieldValue->save();
                 }
@@ -179,14 +193,15 @@ class ActionController extends Controller
         throw new  NotFoundHttpException();
     }
 
-    private function setupDynapmicModel($actionFields){
-        $model = new DynamicModel(ArrayHelper::getColumn($actionFields,function($data){
+    private function setupDynapmicModel($actionFields)
+    {
+        $model = new DynamicModel(ArrayHelper::getColumn($actionFields, function ($data) {
             return $data['label'];
         }));
 
-        foreach($actionFields as $actionField){
+        foreach ($actionFields as $actionField) {
             $model->addRule([$actionField->label], ($actionField->type == ActionFields::TYPE_TEXT ? 'string' : 'boolean'));
-            if($actionField->required){
+            if ($actionField->required) {
                 $model->addRule([$actionField->label], 'required');
             }
         }

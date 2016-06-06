@@ -9,20 +9,25 @@ use yii\bootstrap\NavBar;
 
 <?php
 NavBar::begin([
-	'brandLabel' => 'yii2-enhanced',
-	'brandUrl'   => Yii::$app->homeUrl,
-	'options'    => [
-		'class' => 'navbar-inverse navbar-fixed-top',
-	],
+    'brandLabel' => 'yii2-enhanced',
+    'brandUrl' => Yii::$app->homeUrl,
+    'options' => [
+        'class' => 'navbar-inverse navbar-fixed-top',
+    ],
 ]);
+
+$menuItems = [['label' => Yii::t('menu', 'Home'), 'url' => ['/site/index']]];
+if (!Yii::$app->user->isGuest) {
+    $menuItems[] = ['label' => Yii::t('menu', 'Action'), 'url' => ['/action/index']];
+    $menuItems[] = ['label' => Yii::t('menu', 'Logout'), 'url' => ['/user/logout']];
+} else {
+    $menuItems[] = ['label' => Yii::t('menu', 'Register'), 'url' => ['/user/registration']];
+    $menuItems[] = ['label' => Yii::t('menu', 'Login'), 'url' => ['/user/login']];
+}
+
 echo Nav::widget([
-	'options' => ['class' => 'navbar-nav navbar-right'],
-	'items'   => [
-		['label' => Yii::t('menu', 'Home'), 'url' => ['/site/index']],
-		['label' => Yii::t('menu', 'Contact'), 'url' => ['/site/contact']],
-		['label' => Yii::t('menu','Register'),'url' => ['/user/registration']],
-		['label' => Yii::t('menu','Login'),'url' => ['/user/login']]
-	],
+    'options' => ['class' => 'navbar-nav navbar-right'],
+    'items' => $menuItems,
 ]);
 NavBar::end();
 ?>
