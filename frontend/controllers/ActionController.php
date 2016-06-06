@@ -2,7 +2,6 @@
 
 namespace frontend\controllers;
 
-use common\components\helpers\FileHelper;
 use common\models\Action;
 use common\models\ActionFields;
 use common\models\ActionFieldsValue;
@@ -11,13 +10,11 @@ use Yii;
 use yii\base\DynamicModel;
 use yii\base\Model;
 use yii\db\Expression;
-use yii\di\Container;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\web\UploadedFile;
 
 /**
  * ActionController implements the CRUD actions for Action model.
@@ -96,7 +93,6 @@ class ActionController extends Controller
             }
             if ($model->load(Yii::$app->request->post()) && Model::loadMultiple($actionFieldsModels, ['ActionFields' => $postActionFields])) {
                 if (($model->validate() && Model::validateMultiple($actionFieldsModels))) {
-                    $model = $this->upload($model);
                     if ($model->save(false)) {
                         foreach ($actionFieldsModels as $actionField) {
                             $actionField->action_id = $model->id;
@@ -113,11 +109,6 @@ class ActionController extends Controller
 
     }
 
-    private function upload($model)
-    {
-        return $model;
-    }
-
     /**
      * Updates an existing Action model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -127,6 +118,7 @@ class ActionController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model->scenario = Action::SCENARIO_UPDATE;
         if (Yii::$app->request->isPost) {
             $postActionFields = array_values(Yii::$app->request->post('ActionFields', []));
             $actionFieldsModels = [];
@@ -143,7 +135,6 @@ class ActionController extends Controller
                     if (!empty(($implode = implode(',', array_values(array_diff(ArrayHelper::getColumn($model->actionFields, 'id'), ArrayHelper::getColumn($postActionFields, 'id'))))))) {
                         ActionFields::deleteAll(new Expression('id IN (' . $implode . ')'));
                     }
-                    $model = $this->upload($model);
                     if ($model->save(false)) {
                         foreach ($actionFieldsModels as $actionField) {
                             $actionField->action_id = $model->id;

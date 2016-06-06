@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\components\helpers\FileHelper;
 use Yii;
 use yii\web\UploadedFile;
 
@@ -33,6 +34,10 @@ class Action extends \common\components\db\ActiveRecord
 {
     const SCENARIO_UPDATE = 'update';
 
+    public $image_virtual;
+    public $image_facebook_virtual;
+    public $image_twitter_virtual;
+
     /**
      * @inheritdoc
      */
@@ -43,29 +48,35 @@ class Action extends \common\components\db\ActiveRecord
 
     public function beforeValidate()
     {
-        if ($this->scenario == self::SCENARIO_UPDATE) {
-            if (!is_null(($image = UploadedFile::getInstance($this, 'image')))) {
-                $this->image = $image;
-            }
-            if (!is_null(($image_facebook = UploadedFile::getInstance($this, 'image_facebook')))) {
-                $this->image_facebook = $image_facebook;
-            }
-            if (!is_null(($image_twitter = UploadedFile::getInstance($this, 'image_twitter')))) {
-                $this->image_twitter = $image_twitter;
-            }
+        if (!is_null(($image = UploadedFile::getInstance($this, 'image_virtual')))) {
+            $this->image_virtual = $image;
         }
+        if (!is_null(($image_facebook = UploadedFile::getInstance($this, 'image_facebook_virtual')))) {
+            $this->image_facebook_virtual = $image_facebook;
+        }
+        if (!is_null(($image_twitter = UploadedFile::getInstance($this, 'image_twitter_virtual')))) {
+            $this->image_twitter_virtual = $image_twitter;
+        }
+        return parent::beforeValidate();
     }
 
     public function beforeSave($insert)
     {
-        if (!is_string($this->image)) {
-            $this->image = $this->upload($this->image);
+        if (is_a($this->image_virtual, UploadedFile::className())) {
+            if (unlink(Yii::getAlias('@uploadPath') . '/' . $this->image)) {
+                $this->image = $this->upload($this->image_virtual);
+            }
         }
-        if (!is_string($this->image_facebook)) {
-            $this->image_facebook = $this->upload($this->image_facebook);
+        if (is_a($this->image_facebook, UploadedFile::className())) {
+            if (unlink(Yii::getAlias('@uploadPath') . '/' . $this->image_facebook)) {
+                $this->image_facebook = $this->upload($this->image_facebook_virtual);
+            }
+
         }
-        if (!is_string($this->image_twitter)) {
-            $this->image_twitter = $this->upload($this->image_twitter);
+        if (is_a($this->image_twitter, UploadedFile::className())) {
+            if (unlink(Yii::getAlias('@uploadPath') . '/' . $this->image_twitter)) {
+                $this->image_twitter = $this->upload($this->image_twitter_virtual);
+            }
         }
         return parent::beforeSave($insert);
     }
@@ -75,12 +86,6 @@ class Action extends \common\components\db\ActiveRecord
         $imageRedom = FileHelper::redomName($imageFile->baseName, $imageFile->extension);
         $imageFile->saveAs($imageRedom);
         return array_pop((array_slice(explode('/', $imageRedom), -1)));
-    }
-
-
-    public function beforeValidate()
-    {
-        return parent::beforeValidate();
     }
 
     /**
@@ -94,8 +99,8 @@ class Action extends \common\components\db\ActiveRecord
             [['description', 'description_facebook', 'description_twitter'], 'string'],
             [['name', 'image', 'image_facebook', 'image_twitter'], 'string', 'max' => 128],
             [['intro'], 'string', 'max' => 255],
-            [['image', 'image_facebook', 'image_twitter'], 'file', 'extensions' => ['jpg', 'jpeg', 'png'], 'skipOnError' => false],
-            [['image', 'image_facebook', 'image_twitter'], 'file', 'skipOnEmpty' => true, 'on' => self::SCENARIO_UPDATE]
+            [['image_virtual', 'image_facebook_virtual', 'image_twitter_virtual'], 'file', 'extensions' => ['jpg', 'jpeg', 'png']],
+            [['image_virtual', 'image_facebook_virtual', 'image_twitter_virtual'], 'file', 'skipOnEmpty' => true, 'on' => self::SCENARIO_UPDATE]
         ];
     }
 

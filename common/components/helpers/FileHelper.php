@@ -21,6 +21,8 @@ class FileHelper extends \yii\helpers\FileHelper
     {
         // Check if string contains @backend
         if (strpos($file_name, '@uploadPath') !== false) {
+            var_dump(str_replace('@uploadPath', '@uploadPath', $file_name));
+            exit;
             self::unlink(str_replace('@uploadPath', '@uploadPath', $file_name), $suppress_errors);
         } else {
             // No backend/frontend found, error

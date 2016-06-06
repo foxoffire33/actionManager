@@ -19,7 +19,7 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'intro')->textInput(['maxlength' => true]) ?>
         </div>
             <div class="col-sm-3">
-            <?= $form->field($model, 'image')->fileInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'image_virtual')->fileInput(['maxlength' => true]) ?>
         </div>
             <div class="col-sm-9">
             <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
@@ -27,7 +27,7 @@ use yii\widgets\ActiveForm;
         </div>
         <div class="row">
             <div class="col-sm-3">
-            <?= $form->field($model, 'image_facebook')->fileInput() ?>
+                <?= $form->field($model, 'image_facebook_virtual')->fileInput() ?>
     </div>
             <div class="col-sm-9">
             <?= $form->field($model, 'description_facebook')->textarea(['rows' => 6]) ?>
@@ -35,7 +35,7 @@ use yii\widgets\ActiveForm;
         </div>
         <div class="row">
             <div class="col-sm-3">
-            <?= $form->field($model, 'image_twitter')->fileInput() ?>
+                <?= $form->field($model, 'image_twitter_virtual')->fileInput() ?>
         </div>
             <div class="col-sm-9">
             <?= $form->field($model, 'description_twitter')->textarea(['rows' => 6]) ?>
