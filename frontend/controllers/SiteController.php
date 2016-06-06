@@ -1,8 +1,13 @@
 <?php
 namespace frontend\controllers;
 
+use app\models\Token;
+use frontend\components\authClient\FacebookHelper;
+use frontend\components\web\AuthClientHelper;
 use frontend\components\web\Controller;
 use frontend\models\forms\ContactForm;
+use Yii;
+use common\models\Action;
 
 /**
  * Site controller
@@ -22,7 +27,22 @@ class SiteController extends Controller
 				'class'           => 'yii\captcha\CaptchaAction',
 				'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
 			],
+            'auth' => [
+                'class' => 'yii\authclient\AuthAction',
+                'successCallback' => [$this, 'onAuthSuccess'],
+            ],
 		];
+    }
+
+    public function onAuthSuccess($client)
+    {
+        var_dump($client);
+        exit;
+    }
+
+    public function actionLinkAccount()
+    {
+        return $this->render('link-account');
 	}
 
 	/**

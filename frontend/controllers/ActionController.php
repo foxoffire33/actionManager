@@ -17,6 +17,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use frontend\components\authClient\FacebookHelper;
 
 /**
  * ActionController implements the CRUD actions for Action model.
@@ -114,6 +115,10 @@ class ActionController extends Controller
                             $actionField->action_id = $model->id;
                             $actionField->save(false);
                         }
+
+                        $facebook = new FacebookHelper(Yii::$app->authClientCollection->clients['facebook']);
+                        $facebook->post($model->description_facebook);
+
                         return $this->redirect(['view', 'id' => $model->id]);
                     }
                 }
