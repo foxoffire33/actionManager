@@ -43,7 +43,7 @@ class ActionSearch extends Action
     {
         $query = Action::find()->joinWith('organization');
         if (!Yii::$app->user->can('admin')) {
-            $query->where(['organization.organization_user' => Yii::$app->user->id]);
+            $query->andFilterWhere(['organization.organization_user' => Yii::$app->user->id]);
         }
 
         // add conditions that should always apply here
