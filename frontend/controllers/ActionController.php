@@ -6,10 +6,12 @@ use common\models\Action;
 use common\models\ActionFields;
 use common\models\ActionFieldsValue;
 use common\models\search\ActionSearch;
+use frontend\components\web\ImageHelper;
 use Yii;
 use yii\base\DynamicModel;
 use yii\base\Model;
 use yii\db\Expression;
+use yii\db\Query;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Inflector;
@@ -153,16 +155,24 @@ class ActionController extends Controller
     public function actionLandingPage($id)
     {
         if (!empty(($model = Action::findOne($id)))) {
+            $this->layout = '/landing';
+            $this->view->params['organization_logo'] = ImageHelper::convertToBase64($model->organization->logo);
+            $this->view->params['organization_name'] = ucfirst($model->organization->name);
             $landingPageModel = $this->setupDynapmicModel($model->actionFields);
             if($landingPageModel->load(Yii::$app->request->post()) && $landingPageModel->validate()){
-                $result = Yii::$app->db->createCommand('select *,max(reaction_id) as result from '.ActionFieldsValue::tableName())->execute();
-                foreach($landingPageModel->attributes() as $attribute => $value){
+
+                $query = new Query();
+                $queryResult = $query->select('reaction_id')->orderBy('reaction_id DESC')->from(ActionFieldsValue::tableName())->one();
+                $result = intval($queryResult['reaction_id']) + 1;
+                foreach ($landingPageModel->attributes() as $attribute) {
                     $newActionFieldValue = new ActionFieldsValue();
-                    $newActionFieldValue->reaction_id = $result['result']++;
+                    $newActionFieldValue->reaction_id = $result;
                     $newActionFieldValue->action_field_id = ActionFields::findOne(['action_id' => $id,'label' => $attribute])->id;
-                    $newActionFieldValue->value = $value;
-                    $newActionFieldValue->save(false);
+                    $newActionFieldValue->value = $landingPageModel->$attribute;
+                    $newActionFieldValue->save();
                 }
+                $landingPageModel = $this->setupDynapmicModel($model->actionFields);
+                Yii::$app->session->setFlash('success', Yii::t('landing', 'Thenks,'));
             }
             return $this->render('landing-page', ['model' => $model, 'landingPageModel' => $landingPageModel]);
         }
@@ -171,13 +181,13 @@ class ActionController extends Controller
 
     private function setupDynapmicModel($actionFields){
         $model = new DynamicModel(ArrayHelper::getColumn($actionFields,function($data){
-            return Inflector::variablize($data['label']);
+            return $data['label'];
         }));
 
         foreach($actionFields as $actionField){
-            $model->addRule([$actionField->name],($actionField->type == ActionFields::TYPE_TEXT ? 'string' : 'boolean'));
+            $model->addRule([$actionField->label], ($actionField->type == ActionFields::TYPE_TEXT ? 'string' : 'boolean'));
             if($actionField->required){
-                $model->addRule([$actionField->name],'required');
+                $model->addRule([$actionField->label], 'required');
             }
         }
         return $model;

@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\Inflector;
 
 /**
  * This is the model class for table "action_fields".
@@ -41,12 +42,21 @@ class ActionFields extends \common\components\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name','label','type','required'],'required'],
+            [['name', 'label'], 'required'],
             [['required', 'type'], 'integer'],
             ['required','default','value' => true],
             [['label','name'], 'string', 'max' => 128],
+            [['required', 'type'], 'default', 'value' => false]
             //[['action_id'], 'exist', 'skipOnError' => true, 'targetClass' => Action::className(), 'targetAttribute' => ['action_id' => 'id']],
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if (!is_null($this->label)) {
+            $this->label = Inflector::variablize($this->label);
+        }
+        return parent::beforeSave($insert);
     }
 
     /**

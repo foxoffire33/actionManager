@@ -101,7 +101,7 @@ class SignupForm extends Model
 
     public function afterValidate()
     {
-        $this->password = Yii::$app->security->generateRandomKey(8);
+        $this->password = Yii::$app->security->generateRandomString(8);
         parent::afterValidate();
     }
 

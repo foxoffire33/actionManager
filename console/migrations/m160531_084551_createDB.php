@@ -57,18 +57,18 @@ class m160531_084551_createDB extends Migration
         ],$this->defaultFields));
 
         $this->createTable('action_fields_value',[
-            'reaction_id' => $this->integer()->unique()->notNull(),
+            'reaction_id' => $this->integer()->notNull(),
             'action_field_id' => $this->integer()->notNull(),
             'value' => $this->text()->notNull(),
             'ip' => $this->string(36),//IPV6 is 8 X 4 plus : er tussen
             'created_at' => $this->integer(),
             'updated_at' => $this->integer()->notNull(),
+            'created_by' => $this->integer(11),
+            'updated_by' => $this->integer(11),
             'deleted_at' => $this->integer(),
-            'deleted_at' => $this->integer()
         ]);
 
         //organization
-       // $this->addForeignKey('organization_created_by_fk','organization','created_by','user','id','CASCADE','NO ACTION');
         $this->addForeignKey('organization_user_id_fk','organization','organization_user','user','id','CASCADE','NO ACTION');
         //action
         $this->addForeignKey('action_created_by_fk','action','created_by','user','id','CASCADE','NO ACTION');
@@ -84,8 +84,7 @@ class m160531_084551_createDB extends Migration
     public function down()
     {
         //organization
-        $this->dropForeignKey('organization_created_by_fk','organization');
-        $this->dropForeignKey('organization_updated_by_fk','organization');
+        $this->dropForeignKey('organization_user_id_fk', 'organization');
         //action
         $this->dropForeignKey('action_created_by_fk','action');
         $this->dropForeignKey('action_updated_by_fk','action');

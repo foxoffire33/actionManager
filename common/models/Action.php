@@ -63,20 +63,23 @@ class Action extends \common\components\db\ActiveRecord
     public function beforeSave($insert)
     {
         if (is_a($this->image_virtual, UploadedFile::className())) {
-            if (unlink(Yii::getAlias('@uploadPath') . '/' . $this->image)) {
-                $this->image = $this->upload($this->image_virtual);
+            if (!empty($this->image)) {
+                unlink(Yii::getAlias('@uploadPath') . '/' . $this->image);
             }
+            $this->image = $this->upload($this->image_virtual);
         }
-        if (is_a($this->image_facebook, UploadedFile::className())) {
-            if (unlink(Yii::getAlias('@uploadPath') . '/' . $this->image_facebook)) {
-                $this->image_facebook = $this->upload($this->image_facebook_virtual);
+        if (is_a($this->image_facebook_virtual, UploadedFile::className())) {
+            if (!empty($this->image_facebook)) {
+                unlink(Yii::getAlias('@uploadPath') . '/' . $this->image_facebook);
             }
+            $this->image_facebook = $this->upload($this->image_facebook_virtual);
 
         }
-        if (is_a($this->image_twitter, UploadedFile::className())) {
-            if (unlink(Yii::getAlias('@uploadPath') . '/' . $this->image_twitter)) {
-                $this->image_twitter = $this->upload($this->image_twitter_virtual);
+        if (is_a($this->image_twitter_virtual, UploadedFile::className())) {
+            if (!empty($this->image_twitter)) {
+                unlink(Yii::getAlias('@uploadPath') . '/' . $this->image_twitter);
             }
+            $this->image_twitter = $this->upload($this->image_twitter_virtual);
         }
         return parent::beforeSave($insert);
     }
