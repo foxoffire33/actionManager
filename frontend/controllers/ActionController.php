@@ -6,6 +6,7 @@ use common\models\Action;
 use common\models\ActionFields;
 use common\models\ActionFieldsValue;
 use common\models\search\ActionSearch;
+use frontend\components\authClient\FacebookHelper;
 use frontend\components\web\ImageHelper;
 use Yii;
 use yii\base\DynamicModel;
@@ -17,7 +18,6 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use frontend\components\authClient\FacebookHelper;
 
 /**
  * ActionController implements the CRUD actions for Action model.
@@ -116,9 +116,6 @@ class ActionController extends Controller
                             $actionField->save(false);
                         }
 
-                        $facebook = new FacebookHelper(Yii::$app->authClientCollection->clients['facebook']);
-                        $facebook->post($model->description_facebook);
-
                         return $this->redirect(['view', 'id' => $model->id]);
                     }
                 }
@@ -161,6 +158,11 @@ class ActionController extends Controller
                             $actionField->action_id = $model->id;
                             $actionField->save(false);
                         }
+
+                        $OAuthApis = Yii::$app->authClientCollection->clients;
+                        $facebook = new FacebookHelper($OAuthApis['facebook']);
+                        $facebook->post($model->description_facebook);
+
                         return $this->redirect(['view', 'id' => $model->id]);
                     }
                 }

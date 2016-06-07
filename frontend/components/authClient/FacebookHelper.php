@@ -7,8 +7,10 @@
  */
 namespace frontend\components\authClient;
 
-use app\models\Token;
+use common\models\Token;
+use Facebook\Authentication\AccessToken;
 use Yii;
+use yii\base\Exception;
 
 class FacebookHelper
 {
@@ -19,14 +21,37 @@ class FacebookHelper
     public function __construct($client)
     {
         $this->_client = $client;
+        //check of er een model is
         if (!empty(($model = Token::findOne(['user_id' => Yii::$app->user->id])))) {
             $this->_tokenModel = $model;
+            $this->_client->setAccessToken(['token' => $model->access_token]);
+        } else {
+            $this->_tokenModel = new Token();
+            $this->_tokenModel = Yii::$app->user->id;
         }
+
+        var_dump($this->_client->accessToken);
+        exit;
+
+        ///check access token en update deze
+        $accessToken = $this->_client->accessToken;
+        if ($accessToken->isValid && $this->_tokenModel->access_token != $accessToken->token) {
+            $this->_tokenModel->access_token = $accessToken->token;
+            $this->_tokenModel->save(false);
+        } elseif (!$this->_tokenModel->isNewRecord && $accessToken->isValid) {
+            $this->_tokenModel->delete();
+        }
+
     }
 
     public function post($text)
     {
-        return $this->_client->api('/me/feed', 'post', ['message' => $text]);
+        try {
+            return $this->_client->api('/me/feed', 'post', ['message' => $text]);
+        } catch (Exception $e) {
+            return false;
+        }
+        return true;
     }
 
 }
