@@ -34,10 +34,10 @@ class Token extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'code'], 'required'],
+            [['user_id', 'token'], 'required'],
             [['user_id', 'type', 'created_at', 'updated_at'], 'integer'],
-            [['code'], 'string', 'max' => 400],
-            [['user_id', 'code', 'type'], 'unique', 'targetAttribute' => ['user_id', 'code', 'type'], 'message' => 'The combination of User ID, Code and Type has already been taken.'],
+            [['token'], 'string', 'max' => 400],
+            [['user_id', 'token', 'type'], 'unique', 'targetAttribute' => ['user_id', 'token', 'type'], 'message' => 'The combination of User ID, Token and Type has already been taken.'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -49,7 +49,7 @@ class Token extends \yii\db\ActiveRecord
     {
         return [
             'user_id' => 'User ID',
-            'code' => 'Code',
+            'Token' => 'Token',
             'type' => 'Type',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

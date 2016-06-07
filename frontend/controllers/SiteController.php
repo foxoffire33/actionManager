@@ -6,6 +6,7 @@ use frontend\components\web\AuthClientHelper;
 use frontend\components\web\Controller;
 use frontend\models\forms\ContactForm;
 use Yii;
+use yii\authclient\OAuthToken;
 use yii\web\UnauthorizedHttpException;
 
 /**
@@ -33,25 +34,24 @@ class SiteController extends Controller
         ];
     }
 
+    public function actionFacebook()
+    {
+        $facebook = Yii::$app->authClientCollection->clients['facebook'];
+        // var_dump($facebook->accessToken);exit;
+        $facebook->accessToken->params = ['redirect_uri' => 'http://action-front.nl/site/auth'];
+        var_dump($facebook->refreshAccessToken($facebook->accessToken));
+        exit;
+    }
+
     public function onAuthSuccess($client)
     {
         $model = Token::find()->where(['user_id' => Yii::$app->user->id, 'type' => (Yii::$app->request->get('authclient') == 'facebook' ? Token::TYPE_FACEBOOK : Token::TYPE_TWITTER)])->one();
         if (is_null($model)) {
             $model = new Token();
         }
-        if (Yii::$app->request->get('authclient') == 'facebook') {
-            $model->access_token = $client->accessToken->token;
-            $model->expires = $client->accessToken->expireDuration;
-            $model->code = Yii::$app->request->get('code');
-            $model->user_id = Yii::$app->user->id;
-            $model->type = Token::TYPE_FACEBOOK;
-        } else {
-            $model->access_token = $client->accessToken->token;
-            $model->expires = $client->accessToken->expireDuration;
-            $model->code = Yii::$app->request->get('oauth_token');
-            $model->user_id = Yii::$app->user->id;
-            $model->type = Token::TYPE_TWITTER;
-        }
+        $model->user_id = Yii::$app->user->id;
+        $model->token = $client->accessToken->token;
+        $model->type = (Yii::$app->request->get('authclient') == 'facebook' ? Token::TYPE_FACEBOOK : Token::TYPE_TWITTER);
         if ($model->save()) {
             return $this->render('connected', ['model' => $model]);
         }
