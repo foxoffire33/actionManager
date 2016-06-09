@@ -44,8 +44,13 @@ class SiteController extends Controller
         $request_token['oauth_token_secret'] = $_SESSION['oauth_token_secret'];
 
         $connection = new TwitterOAuth('E6QFE8kcJmbPaGdFAl1jEhk4Z', 'mXPHgFVOM7dGBXDgxFHdJdI8TiLJeCcnc1G8E9J52CMHqaeBSh', $request_token['oauth_token'], $request_token['oauth_token_secret']);
-        var_dump($connection->oauth("oauth/access_token", ["oauth_verifier" => $oauth_verifier]));
-        var_dump($twitter->post('test van reinier'));
+        $access_token = $connection->oauth("oauth/access_token", ["oauth_verifier" => $oauth_verifier]);
+        $_SESSION['access_token'] = $access_token;
+
+        $access_token = $_SESSION['access_token'];
+        $connection = new TwitterOAuth('E6QFE8kcJmbPaGdFAl1jEhk4Z', 'mXPHgFVOM7dGBXDgxFHdJdI8TiLJeCcnc1G8E9J52CMHqaeBSh', $access_token['oauth_token'], $access_token['oauth_token_secret']);
+
+        var_dump($connection->post("statuses/update", ["status" => "hello world"]));
     }
 
     public function actionFacebook($code)
