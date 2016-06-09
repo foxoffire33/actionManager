@@ -25,8 +25,8 @@
     "yiisoft/yii2-jui": "~2.0.0",
     "yiisoft/yii2-swiftmailer": "*",
     "kartik-v/yii2-widget-select2": "@dev",
-    "yiisoft/yii2-authclient": "*",
-    "kartik-v/yii2-social": "@dev"
+    "facebook/php-sdk-v4": "^5.2",
+    "abraham/twitteroauth": "^0.6.4"
   },
   "require-dev": {
     "yiisoft/yii2-codeception": "*",

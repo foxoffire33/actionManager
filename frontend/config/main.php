@@ -23,7 +23,7 @@ return [
             'clients' => [
                 'facebook' => [
                     'class' => 'yii\authclient\clients\Facebook',
-                    'scope' => ['user_managed_groups', 'user_posts', 'publish_actions', 'offline_access'],
+                    'scope' => ['user_managed_groups', 'user_posts', 'publish_actions'],
                     'clientId' => '1034207386656125',
                     'clientSecret' => '23efaaf565279ea7a8c93c1f388590b1',
                 ],

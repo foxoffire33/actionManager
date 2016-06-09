@@ -1,12 +1,14 @@
 <?php
 namespace frontend\controllers;
 
+use Abraham\TwitterOAuth\TwitterOAuth;
 use common\models\Token;
+use frontend\components\facebook\Auth;
+use frontend\components\twitter\TwitterAuth;
 use frontend\components\web\AuthClientHelper;
 use frontend\components\web\Controller;
 use frontend\models\forms\ContactForm;
 use Yii;
-use yii\authclient\OAuthToken;
 use yii\web\UnauthorizedHttpException;
 
 /**
@@ -34,13 +36,33 @@ class SiteController extends Controller
         ];
     }
 
-    public function actionFacebook()
+    public function actionTwitter($oauth_token, $oauth_verifier)
     {
-        $facebook = Yii::$app->authClientCollection->clients['facebook'];
-        // var_dump($facebook->accessToken);exit;
-        $facebook->accessToken->params = ['redirect_uri' => 'http://action-front.nl/site/auth'];
-        var_dump($facebook->refreshAccessToken($facebook->accessToken));
-        exit;
+        $twitter = new TwitterAuth();
+        $request_token = [];
+        $request_token['oauth_token'] = $_SESSION['oauth_token'];
+        $request_token['oauth_token_secret'] = $_SESSION['oauth_token_secret'];
+
+        $connection = new TwitterOAuth('E6QFE8kcJmbPaGdFAl1jEhk4Z', 'mXPHgFVOM7dGBXDgxFHdJdI8TiLJeCcnc1G8E9J52CMHqaeBSh', $request_token['oauth_token'], $request_token['oauth_token_secret']);
+        var_dump($connection->oauth("oauth/access_token", ["oauth_verifier" => $oauth_verifier]));
+        var_dump($twitter->post('test van reinier'));
+    }
+
+    public function actionFacebook($code)
+    {
+        $facebook = new Auth();
+        //firsttime login
+        if (!is_null(($access_token = $facebook->getAccessToken()))) {
+            if (empty(($model = \Yii::$app->user->identity->token))) {
+                $model = new Token();
+            } else {
+                $model->user_id = \Yii::$app->user->id;
+                $model->type = 0;
+            }
+            $model->token = $access_token->getValue();
+            $model->save();
+        }
+        return $this->render('connected');
     }
 
     public function onAuthSuccess($client)
@@ -60,7 +82,9 @@ class SiteController extends Controller
 
     public function actionLinkAccount()
     {
-        return $this->render('link-account');
+        $facebook = new \frontend\components\facebook\Auth();
+        $twitter = new TwitterAuth();
+        return $this->render('link-account', ['facebookUrl' => $facebook->getLoginUrl(), 'twitterUrl' => $twitter->getLoginUrl()]);
     }
 
     /**
@@ -78,7 +102,8 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionContact()
+    public
+    function actionContact()
     {
         $model = new ContactForm();
         if ($model->load(\Yii::$app->request->post()) && $model->validate()) {
@@ -101,7 +126,8 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionAbout()
+    public
+    function actionAbout()
     {
         return $this->render('about');
     }

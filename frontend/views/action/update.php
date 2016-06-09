@@ -18,7 +18,8 @@ $this->params['breadcrumbs'][] = Yii::t('action', 'Update');
 
     <?= $this->render('_form', [
         'model' => $model,
-        'actionFields' => $actionFields
+        'actionFields' => $actionFields,
+        'facebookLoginUrl' => $facebookLoginUrl
     ]) ?>
 
 </div>

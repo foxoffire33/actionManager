@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\components\db\ActiveRecord;
 use Yii;
 use common\models\User;
 
@@ -16,7 +17,7 @@ use common\models\User;
  *
  * @property User $user
  */
-class Token extends \yii\db\ActiveRecord
+class Token extends ActiveRecord
 {
     const TYPE_FACEBOOK = 0;
     const TYPE_TWITTER = 1;

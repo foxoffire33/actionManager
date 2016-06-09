@@ -6,7 +6,9 @@ use common\models\Action;
 use common\models\ActionFields;
 use common\models\ActionFieldsValue;
 use common\models\search\ActionSearch;
+use Facebook\Facebook;
 use frontend\components\authClient\FacebookHelper;
+use frontend\components\facebook\Auth;
 use frontend\components\web\ImageHelper;
 use Yii;
 use yii\base\DynamicModel;
@@ -136,6 +138,7 @@ class ActionController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $facebook = new Auth();
         $model->scenario = Action::SCENARIO_UPDATE;
         if (Yii::$app->request->isPost) {
             $postActionFields = array_values(Yii::$app->request->post('ActionFields', []));
@@ -158,10 +161,9 @@ class ActionController extends Controller
                             $actionField->action_id = $model->id;
                             $actionField->save(false);
                         }
-
-                        $OAuthApis = Yii::$app->authClientCollection->clients;
-                        $facebook = new FacebookHelper($OAuthApis['facebook']);
-                        $facebook->post($model->description_facebook);
+                        if ($model->post_on_facebook) {
+                            $facebook->post('http://action-front.nl/' . $model->id, $model->description_facebook);
+                        }
 
                         return $this->redirect(['view', 'id' => $model->id]);
                     }
@@ -170,7 +172,7 @@ class ActionController extends Controller
         } else {
             $actionFieldsModels = $model->actionFields;
         }
-        return $this->render('update', ['model' => $model, 'actionFields' => $actionFieldsModels]);
+        return $this->render('update', ['model' => $model, 'actionFields' => $actionFieldsModels, 'facebookLoginUrl' => $facebook->getLoginUrl()]);
     }
 
     public function actionLandingPage($id)
