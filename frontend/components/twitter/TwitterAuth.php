@@ -15,9 +15,9 @@ use yii;
 class TwitterAuth
 {
 
+    public $_client;
     private $customer_key = 'E6QFE8kcJmbPaGdFAl1jEhk4Z';
     private $customer_secret = 'mXPHgFVOM7dGBXDgxFHdJdI8TiLJeCcnc1G8E9J52CMHqaeBSh';
-    public $_client;
 
     public function __construct($accessToken = null, $accessTokenSecret = null)
     {
@@ -39,9 +39,21 @@ class TwitterAuth
     }
 
 
-    public function post($text, $link)
+    public function post($link, $text, $image = null)
     {
-        return $this->_client->post("statuses/update", ["status" => substr($text, 0, (140 - strlen($link))) . $link]);
+        $parameters = ['status' => substr($text, 0, (130 - strlen($link))) . ' ' . $link];
+        //  if (!is_null(($mediaID = $this->uploadFileToTwitter($image)))) {
+        //      $parameters['media_ids'] = $mediaID;
+        //  }
+        return $this->_client->post("statuses/update", $parameters);
     }
+
+    /* public function uploadFileToTwitter($fileName)
+     {
+         $filePath = Yii::getAlias('@uploadPath') . '/' . $fileName;
+         $upload = $this->_client->upload('media/upload', ['media' => $filePath]);
+         return $upload->media_id_string;
+     }*/
+
 
 }

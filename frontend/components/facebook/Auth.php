@@ -28,15 +28,20 @@ class Auth
 
     }
 
-    public function getMe()
-    {
-        $this->_client->get('');
-    }
-
     public function getLoginUrl()
     {
         return $this->_client->getRedirectLoginHelper()->getLoginUrl('http://' . $_SERVER['SERVER_NAME'] . '/site/facebook', $this->scope);
     }
+
+    public function post($link, $mssage)
+    {
+        if (!empty(($accessToken = $this->getAccessToken()))) {
+            return $this->_client->post('/me/feed', ['link' => $link, 'message' => $mssage], $accessToken);
+        }
+        return false;
+    }
+
+    //deze function handeld alle get acties af
 
     public function getAccessToken()
     {
@@ -56,8 +61,6 @@ class Auth
         }
         return null;
     }
-
-    //deze function handeld alle get acties af
 
     public function getExtendedAccessToken($access_token)
     {
@@ -82,15 +85,6 @@ class Auth
         return false;
 
     }
-
-    public function post($link, $mssage)
-    {
-        if (!empty(($accessToken = $this->getAccessToken()))) {
-            return $this->_client->post('/me/feed', ['link' => $link, 'message' => $mssage], $accessToken);
-        }
-        return false;
-    }
-
 
     public function setDefaultAccessToken($token)
     {

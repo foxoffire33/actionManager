@@ -52,7 +52,7 @@ class SiteController extends Controller
         $model->token = $access_token['oauth_token'];
         $model->token_secret = $access_token['oauth_token_secret'];
         $model->save();
-
+        return $this->render('connected');
     }
 
     public function actionFacebook($code)
@@ -63,28 +63,12 @@ class SiteController extends Controller
             if (empty(($model = \Yii::$app->user->identity->token))) {
                 $model = new Token();
             } else {
-                $model->user_id = \Yii::$app->user->id;
-                $model->type = 0;
+                $model->type = Token::TYPE_FACEBOOK;
             }
             $model->token = $access_token->getValue();
             $model->save();
         }
         return $this->render('connected');
-    }
-
-    public function onAuthSuccess($client)
-    {
-        $model = Token::find()->where(['user_id' => Yii::$app->user->id, 'type' => (Yii::$app->request->get('authclient') == 'facebook' ? Token::TYPE_FACEBOOK : Token::TYPE_TWITTER)])->one();
-        if (is_null($model)) {
-            $model = new Token();
-        }
-        $model->user_id = Yii::$app->user->id;
-        $model->token = $client->accessToken->token;
-        $model->type = (Yii::$app->request->get('authclient') == 'facebook' ? Token::TYPE_FACEBOOK : Token::TYPE_TWITTER);
-        if ($model->save()) {
-            return $this->render('connected', ['model' => $model]);
-        }
-        throw new UnauthorizedHttpException();
     }
 
     public function actionLinkAccount()

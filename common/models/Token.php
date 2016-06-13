@@ -35,9 +35,10 @@ class Token extends ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'token'], 'required'],
+            [['token'], 'required'],
             [['user_id', 'type', 'created_at', 'updated_at'], 'integer'],
             [['token'], 'string', 'max' => 400],
+            ['user_id', 'default', 'value' => \Yii::$app->user->id],
             [['user_id', 'token', 'type'], 'unique', 'targetAttribute' => ['user_id', 'token', 'type'], 'message' => 'The combination of User ID, Token and Type has already been taken.'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];

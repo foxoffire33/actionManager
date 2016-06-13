@@ -2,12 +2,10 @@
 
 namespace frontend\controllers;
 
-use Abraham\TwitterOAuth\TwitterOAuth;
 use common\models\Action;
 use common\models\ActionFields;
 use common\models\ActionFieldsValue;
 use common\models\search\ActionSearch;
-use Facebook\Facebook;
 use frontend\components\authClient\FacebookHelper;
 use frontend\components\facebook\Auth;
 use frontend\components\twitter\TwitterAuth;
@@ -106,6 +104,7 @@ class ActionController extends Controller
     public function actionCreate()
     {
         $model = new Action();
+        $facebook = new Auth();
         if (Yii::$app->request->isPost) {
             $postActionFields = Yii::$app->request->post('ActionFields', []);
             $actionFieldsModels = [];
@@ -119,7 +118,9 @@ class ActionController extends Controller
                             $actionField->action_id = $model->id;
                             $actionField->save(false);
                         }
-
+                        //share op socialMedia
+                        $this->socialMediaPost($model);
+                        //redirect to view
                         return $this->redirect(['view', 'id' => $model->id]);
                     }
                 }
@@ -127,8 +128,20 @@ class ActionController extends Controller
         } else {
             $actionFieldsModels = $model->actionFields;
         }
-        return $this->render('create', ['model' => $model, 'actionFields' => $actionFieldsModels]);
+        return $this->render('create', ['model' => $model, 'actionFields' => $actionFieldsModels, 'facebookLoginUrl' => $facebook->getLoginUrl()]);
 
+    }
+
+    private function socialMediaPost($actionModel)
+    {
+        if ($actionModel->post_on_facebook) {
+            $facebook = new Auth();
+            $facebook->post($_SERVER['HTTP_HOST'] . '/' . $actionModel->id, $actionModel->description_facebook);
+        }
+        if ($actionModel->post_on_twitter) {
+            $twitter = new TwitterAuth();
+            $twitter->post($_SERVER['HTTP_HOST'] . '/' . $actionModel->id, $actionModel->description_twitter, $actionModel->image_twitter);
+        }
     }
 
     /**
@@ -141,7 +154,6 @@ class ActionController extends Controller
     {
         $model = $this->findModel($id);
         $facebook = new Auth();
-        $twitter = new TwitterAuth();
         $model->scenario = Action::SCENARIO_UPDATE;
         if (Yii::$app->request->isPost) {
             $postActionFields = array_values(Yii::$app->request->post('ActionFields', []));
@@ -164,14 +176,9 @@ class ActionController extends Controller
                             $actionField->action_id = $model->id;
                             $actionField->save(false);
                         }
-                        if ($model->post_on_facebook) {
-                            $facebook->post('http://action-front.nl/' . $model->id, $model->description_facebook);
-                        }
-                        //  if($model->post_on_twitter){
-                        var_dump($twitter->post($model->description_twitter, 'http://action-front.nl/' . $model->id));
-                        exit;
-                        //  }
-
+                        //share op socialMedia
+                        $this->socialMediaPost($model);
+                        //redirect to view
                         return $this->redirect(['view', 'id' => $model->id]);
                     }
                 }
