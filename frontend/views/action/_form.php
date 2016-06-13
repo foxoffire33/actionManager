@@ -12,8 +12,8 @@ use yii\widgets\ActiveForm;
 
     <div class="action-form">
         <?php $form = ActiveForm::begin(); ?>
-        <?= $form->field($model, 'post_on_facebook')->checkBox() ?>
-        <?= $form->field($model, 'post_on_twitter')->checkBox() ?>
+        <?php // $form->field($model, 'post_on_facebook')->checkBox() ?>
+        <?php // $form->field($model, 'post_on_twitter')->checkBox() ?>
         <div class="row">
             <div class="col-sm-12">
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
@@ -26,22 +26,22 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
         </div>
         </div>
+        <!--<div class="row">
+            <div class="col-sm-3">
+                <?php // $form->field($model, 'image_facebook_virtual')->fileInput() ?>
+            </div>
+            <div class="col-sm-9">
+            <?php // $form->field($model, 'description_facebook')->textarea(['rows' => 6]) ?>
+        </div>
+        </div>
         <div class="row">
             <div class="col-sm-3">
-                <?= $form->field($model, 'image_facebook_virtual')->fileInput() ?>
-    </div>
-            <div class="col-sm-9">
-            <?= $form->field($model, 'description_facebook')->textarea(['rows' => 6]) ?>
-        </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-3">
-                <?= $form->field($model, 'image_twitter_virtual')->fileInput() ?>
+                <?php // $form->field($model, 'image_twitter_virtual')->fileInput() ?>
         </div>
             <div class="col-sm-9">
-            <?= $form->field($model, 'description_twitter')->textarea(['rows' => 6]) ?>
+            <?php // $form->field($model, 'description_twitter')->textarea(['rows' => 6]) ?>
         </div>
-        </div>
+        </div>-->
         <div class="col-sm-12 row">
             <h2>Action fields</h2>
             <table class="table-striped col-sm-12" id="lines">

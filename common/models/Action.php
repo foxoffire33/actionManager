@@ -101,14 +101,14 @@ class Action extends \common\components\db\ActiveRecord
     {
         return [
             ['organization_id', 'default', 'value' => Organization::findOne(['organization_user' => Yii::$app->user->id])->id],
-            [['name', 'intro', 'description', 'description_twitter'], 'required'],
+            [['name', 'intro', 'description'], 'required'],
             [['description', 'description_facebook', 'description_twitter'], 'string'],
             [['name', 'image', 'image_facebook', 'image_twitter'], 'string', 'max' => 128],
             [['intro'], 'string', 'max' => 255],
             [['post_on_facebook', 'post_on_twitter'], 'safe'],
-            [['image_virtual', 'image_facebook_virtual', 'image_twitter_virtual'], 'required', 'except' => self::SCENARIO_UPDATE],
+            //[['image_virtual', 'image_facebook_virtual', 'image_twitter_virtual'], 'required', 'except' => self::SCENARIO_UPDATE],
             [['image_virtual', 'image_facebook_virtual', 'image_twitter_virtual'], 'file', 'extensions' => ['jpg', 'jpeg', 'png']],
-            [['image_virtual', 'image_facebook_virtual', 'image_twitter_virtual'], 'file', 'skipOnEmpty' => true, 'on' => self::SCENARIO_UPDATE],
+            [['image_virtual', 'image_facebook_virtual', 'image_twitter_virtual'], 'file', 'skipOnEmpty' => true],
             //twitter
             ['description_twitter', 'string', 'max' => 130]
         ];

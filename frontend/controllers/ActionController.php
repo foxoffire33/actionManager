@@ -119,7 +119,7 @@ class ActionController extends Controller
                             $actionField->save(false);
                         }
                         //share op socialMedia
-                        $this->socialMediaPost($model);
+                        //$this->socialMediaPost($model);
                         //redirect to view
                         return $this->redirect(['view', 'id' => $model->id]);
                     }
@@ -134,14 +134,14 @@ class ActionController extends Controller
 
     private function socialMediaPost($actionModel)
     {
-        if ($actionModel->post_on_facebook) {
-            $facebook = new Auth();
-            $facebook->post($_SERVER['HTTP_HOST'] . '/' . $actionModel->id, $actionModel->description_facebook);
-        }
-        if ($actionModel->post_on_twitter) {
-            $twitter = new TwitterAuth();
-            $twitter->post($_SERVER['HTTP_HOST'] . '/' . $actionModel->id, $actionModel->description_twitter, $actionModel->image_twitter);
-        }
+        // if ($actionModel->post_on_facebook) {
+        //     $facebook = new Auth();
+        //     $facebook->post($_SERVER['HTTP_HOST'] . '/' . $actionModel->id, $actionModel->description_facebook);
+        // }
+        //if ($actionModel->post_on_twitter) {
+        //    $twitter = new TwitterAuth();
+        //    $twitter->post($_SERVER['HTTP_HOST'] . '/' . $actionModel->id, $actionModel->description_twitter, $actionModel->image_twitter);
+        //}
     }
 
     /**
@@ -177,7 +177,7 @@ class ActionController extends Controller
                             $actionField->save(false);
                         }
                         //share op socialMedia
-                        $this->socialMediaPost($model);
+                        //$this->socialMediaPost($model);
                         //redirect to view
                         return $this->redirect(['view', 'id' => $model->id]);
                     }
