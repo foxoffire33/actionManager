@@ -27,7 +27,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => false,
                 'format' => 'raw',
                 'value' => function($data){
-                    return Html::img(ImageHelper::convertToBase64($data->image),['width' => 40]);
+                    if (empty($data->image)) {
+                        return Yii::t('action', 'No image found');
+                    } else {
+                        return Html::img(ImageHelper::convertToBase64($data->image), ['width' => 40]);
+                    }
                 },
             ],
             'organization_id' => [

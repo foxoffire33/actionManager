@@ -17,8 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h4><?= $model->intro ?></h4>
 
     <p>
-        <?= Html::a(Yii::t('action', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('action', 'Delete'), ['delete', 'id' => $model->id], [
+        <?= Html::a(Yii::t('common', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('common', 'Delete'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => Yii::t('action', 'Are you sure you want to delete this item?'),
@@ -30,30 +30,35 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'created_at',
-            'updated_at',
-            'created_by',
-            'updated_by',
-            'deleted_at',
+            'created_at:datetime',
+            'updated_at:datetime',
+            'created_by' => [
+                'attribute' => 'created_by',
+                'value' => $model->createdBy->username
+            ],
+            'updated_by' => [
+                'attribute' => 'updated_by',
+                'value' => $model->updatedBy->username
+            ],
         ],
     ]) ?>
 
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-12">
             <h3>Action</h3>
             <?= Html::img(ImageHelper::convertToBase64($model->image), ['alt' => 'image', 'class' => 'img-responsive img-rounded']); ?>
             <p><?= nl2br($model->description); ?></p>
         </div>
-        <div class="col-sm-4">
+        <!--<div class="col-sm-4">
             <h3>Facebook</h3>
-            <?= Html::img(ImageHelper::convertToBase64($model->image_facebook), ['alt' => 'facebook image', 'class' => 'img-responsive img-rounded']); ?>
-            <p><?= nl2br($model->description_facebook); ?></p>
+            <?php // Html::img(ImageHelper::convertToBase64($model->image_facebook), ['alt' => 'facebook image', 'class' => 'img-responsive img-rounded']); ?>
+            <p><?php // nl2br($model->description_facebook); ?></p>
         </div>
         <div class="col-sm-4">
             <h3>Twitter</h3>
-            <?= Html::img(ImageHelper::convertToBase64($model->image_twitter), ['alt' => 'twitter image', 'class' => 'img-responsive img-rounded']); ?>
-            <p><?= nl2br($model->description_twitter); ?></p>
-        </div>
+            <?php // Html::img(ImageHelper::convertToBase64($model->image_twitter), ['alt' => 'twitter image', 'class' => 'img-responsive img-rounded']); ?>
+            <p><?php // nl2br($model->description_twitter); ?></p>
+        </div>-->
     </div>
 
 </div>
