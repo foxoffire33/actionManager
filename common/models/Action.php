@@ -39,6 +39,7 @@ class Action extends \common\components\db\ActiveRecord
     public $image_twitter_virtual;
     //options
     public $post_on_facebook;
+    public $post_on_twitter;
 
     /**
      * @inheritdoc

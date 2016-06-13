@@ -1,7 +1,6 @@
 <?php
 namespace frontend\controllers;
 
-use Abraham\TwitterOAuth\TwitterOAuth;
 use common\models\Token;
 use frontend\components\facebook\Auth;
 use frontend\components\twitter\TwitterAuth;
@@ -38,19 +37,22 @@ class SiteController extends Controller
 
     public function actionTwitter($oauth_token, $oauth_verifier)
     {
-        $twitter = new TwitterAuth();
-        $request_token = [];
-        $request_token['oauth_token'] = $_SESSION['oauth_token'];
-        $request_token['oauth_token_secret'] = $_SESSION['oauth_token_secret'];
+//vraag accesstoken aan
+        $twitter = new TwitterAuth($_SESSION['oauth_token'], $_SESSION['oauth_token_secret']);
+        $access_token = $twitter->_client->oauth("oauth/access_token", ["oauth_verifier" => $oauth_verifier]);
 
-        $connection = new TwitterOAuth('E6QFE8kcJmbPaGdFAl1jEhk4Z', 'mXPHgFVOM7dGBXDgxFHdJdI8TiLJeCcnc1G8E9J52CMHqaeBSh', $request_token['oauth_token'], $request_token['oauth_token_secret']);
-        $access_token = $connection->oauth("oauth/access_token", ["oauth_verifier" => $oauth_verifier]);
-        $_SESSION['access_token'] = $access_token;
+//zoek voor bestaand model
+        $model = Token::findOne(['user_id' => Yii::$app->user->id, 'type' => Token::TYPE_TWITTER]);
+        if (is_null($model)) {
+            $model = new Token();
+            $model->user_id = Yii::$app->user->id;
+            $model->type = Token::TYPE_TWITTER;
+        }
+//set / update access token
+        $model->token = $access_token['oauth_token'];
+        $model->token_secret = $access_token['oauth_token_secret'];
+        $model->save();
 
-        $access_token = $_SESSION['access_token'];
-        $connection = new TwitterOAuth('E6QFE8kcJmbPaGdFAl1jEhk4Z', 'mXPHgFVOM7dGBXDgxFHdJdI8TiLJeCcnc1G8E9J52CMHqaeBSh', $access_token['oauth_token'], $access_token['oauth_token_secret']);
-
-        var_dump($connection->post("statuses/update", ["status" => "hello world"]));
     }
 
     public function actionFacebook($code)

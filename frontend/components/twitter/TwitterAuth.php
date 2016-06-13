@@ -9,17 +9,25 @@
 namespace frontend\components\twitter;
 
 use Abraham\TwitterOAuth\TwitterOAuth;
+use common\models\Token;
+use yii;
 
 class TwitterAuth
 {
 
     private $customer_key = 'E6QFE8kcJmbPaGdFAl1jEhk4Z';
     private $customer_secret = 'mXPHgFVOM7dGBXDgxFHdJdI8TiLJeCcnc1G8E9J52CMHqaeBSh';
-    private $_client;
+    public $_client;
 
-    public function __construct()
+    public function __construct($accessToken = null, $accessTokenSecret = null)
     {
-        $this->_client = new TwitterOAuth($this->customer_key, $this->customer_secret);
+        if (!is_null($accessToken) && !is_null($accessTokenSecret)) {
+            $this->_client = new TwitterOAuth($this->customer_key, $this->customer_secret, $accessToken, $accessTokenSecret);
+        } elseif (!is_null(($model = Token::findOne(['user_id' => Yii::$app->user->id, 'type' => Token::TYPE_TWITTER])))) {
+            $this->_client = new TwitterOAuth($this->customer_key, $this->customer_secret, $model->token, $model->token_secret);
+        } else {
+            $this->_client = new TwitterOAuth($this->customer_key, $this->customer_secret);
+        }
     }
 
     public function getLoginUrl()
@@ -30,16 +38,10 @@ class TwitterAuth
         return $this->_client->url('oauth/authorize', ['oauth_token' => $request_token['oauth_token']]);
     }
 
-    public function checkToken($access_token, $access_token_secret)
-    {
-        $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $access_token, $access_token_secret);
-        //  $content = $connection->get("account/verify_credentials");
-    }
 
-    public function post($text)
+    public function post($text, $link)
     {
-        //   var_dump($this->_client->post('statuses/update', ['status' => $text]));exit;
-        //$this->_client->post('statuses/update', ['status' => $text]);
+        return $this->_client->post("statuses/update", ["status" => substr($text, 0, (140 - strlen($link))) . $link]);
     }
 
 }

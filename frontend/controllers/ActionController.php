@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use Abraham\TwitterOAuth\TwitterOAuth;
 use common\models\Action;
 use common\models\ActionFields;
 use common\models\ActionFieldsValue;
@@ -9,6 +10,7 @@ use common\models\search\ActionSearch;
 use Facebook\Facebook;
 use frontend\components\authClient\FacebookHelper;
 use frontend\components\facebook\Auth;
+use frontend\components\twitter\TwitterAuth;
 use frontend\components\web\ImageHelper;
 use Yii;
 use yii\base\DynamicModel;
@@ -139,6 +141,7 @@ class ActionController extends Controller
     {
         $model = $this->findModel($id);
         $facebook = new Auth();
+        $twitter = new TwitterAuth();
         $model->scenario = Action::SCENARIO_UPDATE;
         if (Yii::$app->request->isPost) {
             $postActionFields = array_values(Yii::$app->request->post('ActionFields', []));
@@ -164,6 +167,10 @@ class ActionController extends Controller
                         if ($model->post_on_facebook) {
                             $facebook->post('http://action-front.nl/' . $model->id, $model->description_facebook);
                         }
+                        //  if($model->post_on_twitter){
+                        var_dump($twitter->post($model->description_twitter, 'http://action-front.nl/' . $model->id));
+                        exit;
+                        //  }
 
                         return $this->redirect(['view', 'id' => $model->id]);
                     }
