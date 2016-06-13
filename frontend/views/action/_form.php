@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 
     <div class="action-form">
         <?php $form = ActiveForm::begin(); ?>
-        <?= $form->field($model, 'post_on_facebook')->checkBox(['onclick' => 'window.open("' . $facebookLoginUrl . '","Facebook login","height=100");']) ?>
+        <?= $form->field($model, 'post_on_facebook')->checkBox() ?>
         <?= $form->field($model, 'post_on_twitter')->checkBox() ?>
         <div class="row">
             <div class="col-sm-12">
