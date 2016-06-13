@@ -6,6 +6,7 @@ use common\models\User;
 use Yii;
 use yii\base\Model;
 use yii\web\UploadedFile;
+use frontend\modules\user\Module;
 
 class SignupForm extends Model
 {
@@ -105,9 +106,19 @@ class SignupForm extends Model
         parent::afterValidate();
     }
 
-    public function getAttributeLabels()
+    public function attributeLabels()
     {
-        return [];
+        return [
+            //organization
+            'name' => Module::t('signupForm', 'Name'),
+            'address' => Module::t('signupForm', 'Address'),
+            'city' => Module::t('signupForm', 'City'),
+            'logo' => Module::t('signupForm', 'Logo'),
+            'description' => Module::t('signupForm', 'Description'),
+            //user account
+            'username' => Module::t('signupForm', 'Username'),
+            'email' => Module::t('signupForm', 'Email'),
+        ];
     }
 
 }

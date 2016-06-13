@@ -43,7 +43,7 @@ use yii\widgets\ActiveForm;
         </div>
         </div>-->
         <div class="col-sm-12 row">
-            <h2>Action fields</h2>
+            <h2><?= Yii::t('actionFields', 'Action fields') ?></h2>
             <table class="table-striped col-sm-12" id="lines">
                 <thead>
                 <tr>
@@ -72,11 +72,11 @@ use yii\widgets\ActiveForm;
                 </tbody>
             </table>
             <div class="form-group">
-                <?= Html::a(Yii::t('invoice', 'Add invoice line'), null, ['class' => 'btn btn-success', 'id' => 'add-line']) ?>
+                <?= Html::a(Yii::t('action', 'Add landings page field'), null, ['class' => 'btn btn-success', 'id' => 'add-line']) ?>
             </div>
         </div>
         <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('action', 'Create') : Yii::t('action', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+            <?= Html::submitButton($model->isNewRecord ? Yii::t('common', 'Create') : Yii::t('common', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
         <?php ActiveForm::end(); ?>

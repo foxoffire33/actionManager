@@ -1,6 +1,6 @@
 <?php
 return [
-//	'language'       => 'nl-NL',
+	'language' => 'nl-NL',
 	'sourceLanguage' => 'en-US',
 	'vendorPath'     => dirname(dirname(__DIR__)) . '/vendor',
 	'components'     => [

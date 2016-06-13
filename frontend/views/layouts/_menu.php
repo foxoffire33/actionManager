@@ -16,12 +16,13 @@ NavBar::begin([
     ],
 ]);
 
-$menuItems = [['label' => Yii::t('menu', 'Home'), 'url' => ['/site/index']]];
+$menuItems = [];
 if (!Yii::$app->user->isGuest) {
     $menuItems[] = ['label' => Yii::t('menu', 'Action'), 'url' => ['/action/index']];
-    $menuItems[] = ['label' => Yii::t('menu', 'Logout'), 'url' => ['/user/logout']];
+    $menuItems[] = ['label' => Yii::t('menu', 'Logout ({username})', ['username' => Yii::$app->user->identity->username]), 'url' => ['/user/logout']];
 } else {
-    $menuItems[] = ['label' => Yii::t('menu', 'Register'), 'url' => ['/user/registration']];
+    $menuItems[] = ['label' => Yii::t('menu', 'Home'), 'url' => ['/site/index']];
+    $menuItems[] = ['label' => Yii::t('menu', 'Registration'), 'url' => ['/user/registration']];
     $menuItems[] = ['label' => Yii::t('menu', 'Login'), 'url' => ['/user/login']];
 }
 

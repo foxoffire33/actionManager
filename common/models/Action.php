@@ -122,6 +122,7 @@ class Action extends \common\components\db\ActiveRecord
         return [
             'id' => Yii::t('action', 'ID'),
             'organization_id' => Yii::t('action', 'Organization ID'),
+            'image_virtual' => Yii::t('action', 'Image'),
             'name' => Yii::t('action', 'Name'),
             'intro' => Yii::t('action', 'Intro'),
             'description' => Yii::t('action', 'Description'),

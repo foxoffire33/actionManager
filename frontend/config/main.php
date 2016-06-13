@@ -11,6 +11,7 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
+    'defaultRoute' => 'action',
     'modules' => [
         'user' => [
             'class' => 'frontend\modules\user\Module',

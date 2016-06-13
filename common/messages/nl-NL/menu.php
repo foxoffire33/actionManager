@@ -3,11 +3,7 @@
 return [
 	/** Navigation */
 	'Home'                => 'Home',
-	'User'                => 'Gebruiker',
-	'Page'                => 'Pagina',
-	'Roles'               => 'Rollen',
-	'About'               => 'Over',
-	'Contact'             => 'Contact',
+	'Action' => 'Acties',
 	'Registration'        => 'Registratie',
 	'Account'             => 'Account', // Used for user module
 	'Login'               => 'Inloggen',

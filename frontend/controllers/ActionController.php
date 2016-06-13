@@ -154,7 +154,6 @@ class ActionController extends Controller
     {
         $model = $this->findModel($id);
         $facebook = new Auth();
-        $model->scenario = Action::SCENARIO_UPDATE;
         if (Yii::$app->request->isPost) {
             $postActionFields = array_values(Yii::$app->request->post('ActionFields', []));
             $actionFieldsModels = [];

@@ -32,6 +32,7 @@ class Module extends \yii\base\Module
 				'modules/user/reset'        => 'reset.php',
 				'modules/user/role'         => 'role.php',
 				'modules/user/user'         => 'user.php',
+				'modules/user/signupForm' => 'signupForm.php',
 			],
 		];
 	}
