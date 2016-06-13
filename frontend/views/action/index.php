@@ -34,10 +34,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 },
             ],
-            'organization_id' => [
-                'attribute' => 'organization_id',
-                'value' => 'organization.name'
-            ],
             'name',
             'intro',
             'description:ntext',
