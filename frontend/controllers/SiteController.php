@@ -7,6 +7,7 @@ use frontend\components\web\AuthClientHelper;
 use frontend\components\web\Controller;
 use frontend\models\forms\ContactForm;
 use Yii;
+use yii\web\Response;
 
 /**
  * Site controller
@@ -38,16 +39,10 @@ class SiteController extends Controller
         (new AuthHandler($client));
     }
 
-    public function actionFacebook()
+    public function actionSocialAjax($socialMedia)
     {
-        $facebookAuth = (new AuthHandler(Yii::$app->authClientCollection->clients['facebook']));
-        var_dump($facebookAuth->api('me/feed', ['message' => 'een test met yii2 auth client' . rand(0, 10)]));
-    }
-
-    public function actionTwitter()
-    {
-        $handler = new AuthHandler(Yii::$app->authClientCollection->clients['twitter']);
-        var_dump($handler->api('statuses/update.json', ['status' => 'een test met yii2 auth client' . rand(0, 10)]));
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return ['isValid' => (new AuthHandler($socialMedia))->isValid()];
     }
 
     public function actionLinkAccount()

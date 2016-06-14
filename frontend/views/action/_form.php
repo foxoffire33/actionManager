@@ -12,8 +12,8 @@ use yii\widgets\ActiveForm;
 
     <div class="action-form">
         <?php $form = ActiveForm::begin(); ?>
-        <?= $form->field($model, 'post_on_facebook')->checkBox() ?>
-        <?= $form->field($model, 'post_on_twitter')->checkBox() ?>
+        <?= $form->field($model, 'post_on_facebook')->checkBox(['onclick' => 'checkSocialMedia("facebook")']) ?>
+        <?= $form->field($model, 'post_on_twitter')->checkBox(['onclick' => 'checkSocialMedia("twitter")']) ?>
         <div class="row">
             <div class="col-sm-12">
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
@@ -83,6 +83,28 @@ use yii\widgets\ActiveForm;
 
     </div>
 <?php
+$this->registerJs('
+
+function capitalise(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+}
+
+    function checkSocialMedia(socialMedia){
+                $.ajax({
+            url: \'/site/social-ajax\',
+            data: {socialMedia: socialMedia}
+        }).done(function(data){
+            if(!data.isValid){
+                var text = $(\'<div />\').attr({class: \'alert alert-danger\'}).text("' . Yii::t("action", "First Connect to ") . ' " + capitalise(socialMedia));
+                $(\'.action-form\').prepend(text);
+            }
+        });
+    }
+    
+   
+', \yii\web\View::POS_END);
+
+
 $nextIndex = count($actionFields);
 $typeOptions = [ActionFields::TYPE_TEXT => Yii::t('actionFields', 'Text'), ActionFields::TYPE_CHECKBOX => Yii::t('actionFields', 'Checkbox')];
 $this->registerJs('
