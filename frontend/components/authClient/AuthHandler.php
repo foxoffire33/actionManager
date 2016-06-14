@@ -13,6 +13,9 @@ use yii\web\UnauthorizedHttpException;
  */
 class AuthHandler
 {
+
+    const OAUTH_METHOD_POST = 'POST';
+    const OAUTH_METHOD_GET = 'GET';
     /**
      * @var ClientInterface
      */
@@ -47,5 +50,10 @@ class AuthHandler
 
     public function getUserAttributes(){
         return $this->client->getUserAttributes();
+    }
+
+    public function api($link, $params = [], $method = self::OAUTH_METHOD_POST)
+    {
+        return $this->client->api($link, $method, $params);
     }
 }

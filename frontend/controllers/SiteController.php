@@ -1,16 +1,12 @@
 <?php
 namespace frontend\controllers;
 
-use common\models\Token;
+use frontend\components\authClient\AuthHandler;
 use frontend\components\authClient\TokenHelper;
-use frontend\components\facebook\Auth;
-use frontend\components\twitter\TwitterAuth;
 use frontend\components\web\AuthClientHelper;
 use frontend\components\web\Controller;
 use frontend\models\forms\ContactForm;
 use Yii;
-use frontend\components\authClient\AuthHandler;
-use yii\base\Exception;
 
 /**
  * Site controller
@@ -37,20 +33,21 @@ class SiteController extends Controller
         ];
     }
 
-    public function onAuthSuccess($client){
-      //  $facebook = TokenHelper::SetDBToken($client);
-        var_dump($client);exit;
-      //  var_dump($facebook->accessToken->isValid);
+    public function onAuthSuccess($client)
+    {
+        (new AuthHandler($client));
     }
 
-    public function actionFacebook(){
+    public function actionFacebook()
+    {
         $facebookAuth = (new AuthHandler(Yii::$app->authClientCollection->clients['facebook']));
-        var_dump($facebookAuth->getUserAttributes());
+        var_dump($facebookAuth->api('me/feed', ['message' => 'een test met yii2 auth client' . rand(0, 10)]));
     }
 
-    public function actionTwitter(){
+    public function actionTwitter()
+    {
         $handler = new AuthHandler(Yii::$app->authClientCollection->clients['twitter']);
-        var_dump($handler->getUserAttributes());
+        var_dump($handler->api('statuses/update.json', ['status' => 'een test met yii2 auth client' . rand(0, 10)]));
     }
 
     public function actionLinkAccount()

@@ -6,9 +6,6 @@ use common\models\Action;
 use common\models\ActionFields;
 use common\models\ActionFieldsValue;
 use common\models\search\ActionSearch;
-use frontend\components\authClient\FacebookHelper;
-use frontend\components\facebook\Auth;
-use frontend\components\twitter\TwitterAuth;
 use frontend\components\web\ImageHelper;
 use Yii;
 use yii\base\DynamicModel;
@@ -20,6 +17,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use frontend\components\authClient\AuthHandler;
 
 /**
  * ActionController implements the CRUD actions for Action model.
@@ -104,7 +102,6 @@ class ActionController extends Controller
     public function actionCreate()
     {
         $model = new Action();
-        $facebook = new Auth();
         if (Yii::$app->request->isPost) {
             $postActionFields = Yii::$app->request->post('ActionFields', []);
             $actionFieldsModels = [];
@@ -119,7 +116,7 @@ class ActionController extends Controller
                             $actionField->save(false);
                         }
                         //share op socialMedia
-                        //$this->socialMediaPost($model);
+                        $this->socialMediaPost($model);
                         //redirect to view
                         return $this->redirect(['view', 'id' => $model->id]);
                     }
@@ -128,20 +125,19 @@ class ActionController extends Controller
         } else {
             $actionFieldsModels = $model->actionFields;
         }
-        return $this->render('create', ['model' => $model, 'actionFields' => $actionFieldsModels, 'facebookLoginUrl' => $facebook->getLoginUrl()]);
+        return $this->render('create', ['model' => $model, 'actionFields' => $actionFieldsModels]);
 
     }
 
     private function socialMediaPost($actionModel)
     {
-        // if ($actionModel->post_on_facebook) {
-        //     $facebook = new Auth();
-        //     $facebook->post($_SERVER['HTTP_HOST'] . '/' . $actionModel->id, $actionModel->description_facebook);
-        // }
-        //if ($actionModel->post_on_twitter) {
-        //    $twitter = new TwitterAuth();
-        //    $twitter->post($_SERVER['HTTP_HOST'] . '/' . $actionModel->id, $actionModel->description_twitter, $actionModel->image_twitter);
-        //}
+        if ($actionModel->post_on_facebook) {
+            (new AuthHandler(Yii::$app->authClientCollection->clients['facebook']))->api('me/feed', ['message' => $actionModel->description_facebook . ' http://' . $_SERVER['HTTP_HOST'] . '/' . $actionModel->id]);
+        }
+        if ($actionModel->post_on_twitter) {
+            $link = ' http://' . $_SERVER['HTTP_HOST'] . '/' . $actionModel->id;
+            (new AuthHandler(Yii::$app->authClientCollection->clients['twitter']))->api('statuses/update.json', ['status' => substr($actionModel->description_twitter, 0, (135 - strlen($link))) . $link]);
+        }
     }
 
     /**
@@ -153,7 +149,6 @@ class ActionController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $facebook = new Auth();
         if (Yii::$app->request->isPost) {
             $postActionFields = array_values(Yii::$app->request->post('ActionFields', []));
             $actionFieldsModels = [];
@@ -176,7 +171,7 @@ class ActionController extends Controller
                             $actionField->save(false);
                         }
                         //share op socialMedia
-                        //$this->socialMediaPost($model);
+                        $this->socialMediaPost($model);
                         //redirect to view
                         return $this->redirect(['view', 'id' => $model->id]);
                     }
@@ -185,7 +180,7 @@ class ActionController extends Controller
         } else {
             $actionFieldsModels = $model->actionFields;
         }
-        return $this->render('update', ['model' => $model, 'actionFields' => $actionFieldsModels, 'facebookLoginUrl' => $facebook->getLoginUrl()]);
+        return $this->render('update', ['model' => $model, 'actionFields' => $actionFieldsModels]);
     }
 
     public function actionLandingPage($id)
