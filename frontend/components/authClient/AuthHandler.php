@@ -32,6 +32,7 @@ class AuthHandler
         }
     }
 
+    //todo checken if dit goed gaat en wel nete code is
     public function __destruct()
     {
         if(!$this->client->accessToken->isValid){
