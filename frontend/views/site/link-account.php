@@ -7,6 +7,7 @@
  */
 use yii\helpers\Html;
 ?>
-<?= Html::a('Login met Facebook', $facebookUrl, ['target' => '_blank']) ?>
-
-<?= Html::a('Login met Twitter', $twitterUrl, ['target' => '_blank']) ?>
+<?= yii\authclient\widgets\AuthChoice::widget([
+    'baseAuthUrl' => ['site/auth'],
+    'popupMode' => true,
+]) ?>

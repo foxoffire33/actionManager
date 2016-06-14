@@ -2,13 +2,15 @@
 namespace frontend\controllers;
 
 use common\models\Token;
+use frontend\components\authClient\TokenHelper;
 use frontend\components\facebook\Auth;
 use frontend\components\twitter\TwitterAuth;
 use frontend\components\web\AuthClientHelper;
 use frontend\components\web\Controller;
 use frontend\models\forms\ContactForm;
 use Yii;
-use yii\web\UnauthorizedHttpException;
+use frontend\components\authClient\AuthHandler;
+use yii\base\Exception;
 
 /**
  * Site controller
@@ -35,47 +37,25 @@ class SiteController extends Controller
         ];
     }
 
-    public function actionTwitter($oauth_token, $oauth_verifier)
-    {
-//vraag accesstoken aan
-        $twitter = new TwitterAuth($_SESSION['oauth_token'], $_SESSION['oauth_token_secret']);
-        $access_token = $twitter->_client->oauth("oauth/access_token", ["oauth_verifier" => $oauth_verifier]);
-
-//zoek voor bestaand model
-        $model = Token::findOne(['user_id' => Yii::$app->user->id, 'type' => Token::TYPE_TWITTER]);
-        if (is_null($model)) {
-            $model = new Token();
-            $model->user_id = Yii::$app->user->id;
-            $model->type = Token::TYPE_TWITTER;
-        }
-//set / update access token
-        $model->token = $access_token['oauth_token'];
-        $model->token_secret = $access_token['oauth_token_secret'];
-        $model->save();
-        return $this->render('connected');
+    public function onAuthSuccess($client){
+      //  $facebook = TokenHelper::SetDBToken($client);
+        var_dump($client);exit;
+      //  var_dump($facebook->accessToken->isValid);
     }
 
-    public function actionFacebook($code)
-    {
-        $facebook = new Auth();
-        //firsttime login
-        if (!is_null(($access_token = $facebook->getAccessToken()))) {
-            if (empty(($model = \Yii::$app->user->identity->token))) {
-                $model = new Token();
-            } else {
-                $model->type = Token::TYPE_FACEBOOK;
-            }
-            $model->token = $access_token->getValue();
-            $model->save();
-        }
-        return $this->render('connected');
+    public function actionFacebook(){
+        $facebookAuth = (new AuthHandler(Yii::$app->authClientCollection->clients['facebook']));
+        var_dump($facebookAuth->getUserAttributes());
+    }
+
+    public function actionTwitter(){
+        $handler = new AuthHandler(Yii::$app->authClientCollection->clients['twitter']);
+        var_dump($handler->getUserAttributes());
     }
 
     public function actionLinkAccount()
     {
-        $facebook = new \frontend\components\facebook\Auth();
-        $twitter = new TwitterAuth();
-        return $this->render('link-account', ['facebookUrl' => $facebook->getLoginUrl(), 'twitterUrl' => $twitter->getLoginUrl()]);
+        return $this->render('link-account');
     }
 
     /**
