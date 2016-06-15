@@ -7,6 +7,7 @@ use frontend\components\web\AuthClientHelper;
 use frontend\components\web\Controller;
 use frontend\models\forms\ContactForm;
 use Yii;
+use yii\helpers\Url;
 use yii\web\Response;
 
 /**
@@ -29,6 +30,8 @@ class SiteController extends Controller
             ],
             'auth' => [
                 'class' => 'yii\authclient\AuthAction',
+                'successUrl' => Url::to(['/action/create']),
+                'cancelUrl' => Url::to(['/action/create']),
                 'successCallback' => [$this, 'onAuthSuccess'],
             ],
         ];
