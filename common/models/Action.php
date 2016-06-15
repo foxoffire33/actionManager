@@ -4,6 +4,7 @@ namespace common\models;
 
 use common\components\helpers\FileHelper;
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 
 /**
@@ -33,6 +34,10 @@ use yii\web\UploadedFile;
 class Action extends \common\components\db\ActiveRecord
 {
     const SCENARIO_UPDATE = 'update';
+    //scenarios
+    const SCENARIO_FACEBOOK = 'facebook';
+    const SCENARIO_TWITTER = 'twitter';
+    const SCENARIO_FACEBOOK_AND_TWITTER = 'facebookAndTwitter';
 
     public $image_virtual;
     public $image_facebook_virtual;
@@ -51,6 +56,15 @@ class Action extends \common\components\db\ActiveRecord
 
     public function beforeValidate()
     {
+        //set scenario
+        if ($this->post_on_facebook && $this->post_on_twitter) {
+            $this->scenario = self::SCENARIO_FACEBOOK_AND_TWITTER;
+        } elseif ($this->post_on_facebook && !$this->post_on_twitter) {
+            $this->scenario = self::SCENARIO_FACEBOOK;
+        } elseif ($this->post_on_twitter && !$this->post_on_facebook) {
+            $this->scenario = self::SCENARIO_TWITTER;
+        }
+        //file upload checks
         if (!is_null(($image = UploadedFile::getInstance($this, 'image_virtual')))) {
             $this->image_virtual = $image;
         }
@@ -110,8 +124,19 @@ class Action extends \common\components\db\ActiveRecord
             [['image_virtual', 'image_facebook_virtual', 'image_twitter_virtual'], 'file', 'extensions' => ['jpg', 'jpeg', 'png']],
             [['image_virtual', 'image_facebook_virtual', 'image_twitter_virtual'], 'file', 'skipOnEmpty' => true],
             //twitter
-            ['description_twitter', 'string', 'max' => 130]
+            ['description_twitter', 'string', 'max' => 130],
+            //required
+            [['description_twitter', 'description_facebook'], 'required', 'except' => self::SCENARIO_DEFAULT]
         ];
+    }
+
+    public function scenarios()
+    {
+        return ArrayHelper::merge([
+            self::SCENARIO_TWITTER => array_diff(array_keys($this->attributes), ['description_facebook']),
+            self::SCENARIO_FACEBOOK => array_diff(array_keys($this->attributes), ['description_twitter']),
+            self::SCENARIO_FACEBOOK_AND_TWITTER => array_keys($this->attributes)
+        ], parent::scenarios());
     }
 
     /**
@@ -169,5 +194,10 @@ class Action extends \common\components\db\ActiveRecord
     public function getActionFields()
     {
         return $this->hasMany(ActionFields::className(), ['action_id' => 'id']);
+    }
+
+    private function getAllAndFilter($filter = [])
+    {
+        return array_diff(array_keys($this->attributes), $filter);
     }
 }

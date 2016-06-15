@@ -11,7 +11,7 @@ use yii\widgets\ActiveForm;
 ?>
 
     <div class="action-form">
-        <?php $form = ActiveForm::begin(); ?>
+        <?php $form = ActiveForm::begin(['enableClientValidation' => false]); ?>
         <?= $form->field($model, 'post_on_facebook')->checkBox(['onclick' => 'checkSocialMedia("facebook",$(this))']) ?>
         <?= $form->field($model, 'post_on_twitter')->checkBox(['onclick' => 'checkSocialMedia("twitter",$(this))']) ?>
         <div class="row">
