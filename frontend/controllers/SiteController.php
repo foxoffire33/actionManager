@@ -37,8 +37,7 @@ class SiteController extends Controller
     public function onAuthSuccess($client)
     {
         (new AuthHandler($client));
-        Yii::$app->end();
-
+        return false;
     }
 
     public function actionSocialAjax($socialMedia)
