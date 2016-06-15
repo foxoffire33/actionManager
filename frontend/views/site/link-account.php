@@ -9,5 +9,5 @@ use yii\helpers\Html;
 ?>
 <?= yii\authclient\widgets\AuthChoice::widget([
     'baseAuthUrl' => ['site/auth'],
-    'popupMode' => true,
+    'popupMode' => false,
 ]) ?>

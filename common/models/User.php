@@ -194,4 +194,15 @@ class User extends ActiveRecord implements IdentityInterface
 	{
 		return $this->hasOne(Token::className(), ['user_id' => 'id']);
 	}
+
+	public function getFacebook()
+	{
+		return $this->hasOne(Token::className(), ['user_id' => 'id'])->where(['type' => Token::TYPE_FACEBOOK]);
+	}
+
+	public function getTwitter()
+	{
+		return $this->hasOne(Token::className(), ['user_id' => 'id'])->where(['type' => Token::TYPE_TWITTER]);
+	}
+
 }

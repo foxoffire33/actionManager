@@ -26,5 +26,5 @@ return [
     'Updated By' => 'Bewerkt door',
     'Description Twitter' => 'Text voor Twitter',
     'Description Facebook' => 'Text voor Facebook',
-    'First Connect to ' => 'Verbind eerst met '
+    'Connect to ' => 'Verbinden met '
 ];

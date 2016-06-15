@@ -12,8 +12,8 @@ use yii\widgets\ActiveForm;
 
     <div class="action-form">
         <?php $form = ActiveForm::begin(); ?>
-        <?= $form->field($model, 'post_on_facebook')->checkBox(['onclick' => 'checkSocialMedia("facebook")']) ?>
-        <?= $form->field($model, 'post_on_twitter')->checkBox(['onclick' => 'checkSocialMedia("twitter")']) ?>
+        <?= $form->field($model, 'post_on_facebook')->checkBox(['onclick' => 'checkSocialMedia("facebook",$(this))']) ?>
+        <?= $form->field($model, 'post_on_twitter')->checkBox(['onclick' => 'checkSocialMedia("twitter",$(this))']) ?>
         <div class="row">
             <div class="col-sm-12">
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
@@ -89,14 +89,18 @@ function capitalise(string) {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 }
 
-    function checkSocialMedia(socialMedia){
+    function checkSocialMedia(socialMedia,object){
                 $.ajax({
             url: \'/site/social-ajax\',
             data: {socialMedia: socialMedia}
         }).done(function(data){
             if(!data.isValid){
-                var text = $(\'<div />\').attr({class: \'alert alert-danger\'}).text("' . Yii::t("action", "First Connect to ") . ' " + capitalise(socialMedia));
-                $(\'.action-form\').prepend(text);
+                if(object.is(\':checked\')){
+                    var link = $(\'<a />\').attr({href: data.authUrl,target: \'_blank\',id: socialMedia+\'-login-link\'}).text(" ' . Yii::t("action", "Connect to ") . ' " + capitalise(socialMedia));
+                    object.parent().append(link);
+                }else{
+                    $(\'#\'+socialMedia+\'-login-link\').remove();
+                }
             }
         });
     }

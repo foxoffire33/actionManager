@@ -37,12 +37,15 @@ class SiteController extends Controller
     public function onAuthSuccess($client)
     {
         (new AuthHandler($client));
+        Yii::$app->end();
+
     }
 
     public function actionSocialAjax($socialMedia)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        return ['isValid' => (new AuthHandler($socialMedia))->isValid()];
+        $handler = (new AuthHandler($socialMedia));
+        return ['isValid' => $handler->isValid(), 'authUrl' => $handler->getAuthUrl($socialMedia)];
     }
 
     public function actionLinkAccount()

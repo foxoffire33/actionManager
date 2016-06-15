@@ -6,9 +6,10 @@ use Yii;
 use yii\authclient\ClientInterface;
 use yii\authclient\clients\Facebook;
 use yii\authclient\OAuthToken;
-use yii\base\Exception;
 use yii\base\NotSupportedException;
+use yii\helpers\Url;
 use yii\web\UnauthorizedHttpException;
+use yii\helpers\Html;
 
 /**
  * AuthHandler handles successful authentification via Yii auth component
@@ -26,7 +27,7 @@ class AuthHandler
 
     public function __construct($clientName)
     {
-        if (($client = $this->checkClients($clientName)) !== false) {
+        if (($client = $this->checkClients($clientName)) !== false || is_object(($client = $clientName))) {
             $this->client = $client;
             $this->tokenModel = Token::findOne(['user_id' => Yii::$app->user->id, 'type' => (is_a($this->client, Facebook::className()) ? Token::TYPE_FACEBOOK : Token::TYPE_TWITTER)]);
             if (!is_null(($this->tokenModel))) {
@@ -36,7 +37,7 @@ class AuthHandler
                 $this->tokenModel->user_id = \Yii::$app->user->id;
                 $this->tokenModel->type = (is_a($this->client, Facebook::className()) ? Token::TYPE_FACEBOOK : Token::TYPE_TWITTER);
             }
-        }else{
+        } else {
             throw new NotSupportedException('This platform is not supported');
         }
     }
@@ -52,17 +53,20 @@ class AuthHandler
     //todo checken if dit goed gaat en wel nete code is
     public function __destruct()
     {
-        if(!$this->client->accessToken->isValid){
-            return new UnauthorizedHttpException('accessToken is not valid');
-        }
-        $this->tokenModel->token = $this->client->accessToken->token;
-        $this->tokenModel->token_secret = $this->client->accessToken->tokenSecret;
-        if(!$this->tokenModel->save()){
-            throw new UnauthorizedHttpException('can\'t save token in database');
+        if (is_object($this->client->accessToken)) {
+            if (!$this->client->accessToken->isValid) {
+                return new UnauthorizedHttpException('accessToken is not valid');
+            }
+            $this->tokenModel->token = $this->client->accessToken->token;
+            $this->tokenModel->token_secret = $this->client->accessToken->tokenSecret;
+            if (!$this->tokenModel->save()) {
+                throw new UnauthorizedHttpException('can\'t save token in database');
+            }
         }
     }
 
-    public function getUserAttributes(){
+    public function getUserAttributes()
+    {
         return $this->client->getUserAttributes();
     }
 
@@ -73,10 +77,14 @@ class AuthHandler
 
     public function isValid()
     {
-        try {
-            return $this->client->accessToken->isValid;
-        } catch (Exception $e) {
-            return false;
+        if (!empty(($isValid = $this->client->accessToken))) {
+            return $isValid->isValid;
         }
+        return false;
+    }
+
+    public function getAuthUrl($clientName)
+    {
+        return Url::toRoute(['/site/auth', 'authclient' => $clientName]);
     }
 }
