@@ -49,16 +49,39 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::img(ImageHelper::convertToBase64($model->image), ['alt' => 'image', 'class' => 'img-responsive img-rounded']); ?>
             <p><?= nl2br($model->description); ?></p>
         </div>
-        <!--<div class="col-sm-4">
+        <div class="col-sm-4">
             <h3>Facebook</h3>
-            <?php // Html::img(ImageHelper::convertToBase64($model->image_facebook), ['alt' => 'facebook image', 'class' => 'img-responsive img-rounded']); ?>
-            <p><?php // nl2br($model->description_facebook); ?></p>
+            <?= Html::img(ImageHelper::convertToBase64($model->image_facebook), ['alt' => 'facebook image', 'class' => 'img-responsive img-rounded']); ?>
+            <p><?= nl2br($model->description_facebook); ?></p>
         </div>
         <div class="col-sm-4">
             <h3>Twitter</h3>
-            <?php // Html::img(ImageHelper::convertToBase64($model->image_twitter), ['alt' => 'twitter image', 'class' => 'img-responsive img-rounded']); ?>
-            <p><?php // nl2br($model->description_twitter); ?></p>
-        </div>-->
+            <?= Html::img(ImageHelper::convertToBase64($model->image_twitter), ['alt' => 'twitter image', 'class' => 'img-responsive img-rounded']); ?>
+            <p><?= nl2br($model->description_twitter); ?></p>
+        </div>
+    </div>
+    <div class="row">
+        <?php if (!empty($model->actionFields)): ?>
+            <?php $actionFieldValuesHtml = ''; ?>
+            <table class="table-striped table" style="width: 100%">
+                <thead>
+                <tr>
+                    <?php foreach ($model->actionFields as $actionField): ?>
+                        <th><?= $actionField->label ?></th>
+                        <?php if (!empty($actionField->actionFieldsValues)): ?>
+                            <?php $actionFieldValuesHtml .= '<tr>'; ?>
+                            <?php foreach ($actionField->actionFieldsValues as $actionFieldValue) {
+                                $actionFieldValuesHtml .= "<td>$actionFieldValue->value</td>";
+                            }
+                            $actionFieldValuesHtml .= "</tr>";
+                            ?>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </tr>
+                </thead>
+                <tbody><?= $actionFieldValuesHtml ?></tbody>
+            </table>
+        <?php endif; ?>
     </div>
 
 </div>

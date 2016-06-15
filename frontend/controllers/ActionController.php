@@ -203,7 +203,7 @@ class ActionController extends Controller
                     $newActionFieldValue->save();
                 }
                 $landingPageModel = $this->setupDynapmicModel($model->actionFields);
-                Yii::$app->session->setFlash('success', Yii::t('landing', 'Thenks,'));
+                Yii::$app->session->setFlash('success', Yii::t('landing', 'Thanks'));
             }
             return $this->render('landing-page', ['model' => $model, 'landingPageModel' => $landingPageModel]);
         }
@@ -218,9 +218,7 @@ class ActionController extends Controller
 
         foreach ($actionFields as $actionField) {
             $model->addRule([$actionField->label], ($actionField->type == ActionFields::TYPE_TEXT ? 'string' : 'boolean'));
-            if ($actionField->required) {
-                $model->addRule([$actionField->label], 'required');
-            }
+            $model->addRule([$actionField->label], ($actionField->required ? 'required' : 'safe'));
         }
         return $model;
     }
