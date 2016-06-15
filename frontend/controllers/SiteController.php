@@ -40,7 +40,9 @@ class SiteController extends Controller
     public function onAuthSuccess($client)
     {
         (new AuthHandler($client));
-        return false;
+        $response = Yii::$app->response;
+        $response->content = $this->render('connected');
+        return $response;
     }
 
     public function actionSocialAjax($socialMedia)

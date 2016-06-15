@@ -101,7 +101,18 @@ function capitalise(string) {
         }).done(function(data){
             if(!data.isValid){
                 if(object.is(\':checked\')){
-                    var link = $(\'<a />\').attr({href: data.authUrl,target: \'_blank\',id: socialMedia+\'-login-link\'}).text(" ' . Yii::t("action", "Connect to ") . ' " + capitalise(socialMedia));
+                    var link = $(\'<a />\').attr({\'data-href\': data.authUrl,id: socialMedia+\'-login-link\'}).text(" ' . Yii::t("action", "Connect to ") . ' " + capitalise(socialMedia));
+                    $(link).on(\'click\',function(e){
+                    
+                        var authWindow = window.open("" + $(this).attr(\'data-href\'), "Connect", "width=800, height=300,menubar=0,resizable=0,scrollbars=0");
+                         var interval = setInterval(function (e) {
+                            if (authWindow.closed) {
+                                $(object).trigger(\'click\');
+                                clearInterval(interval);
+                            }
+                        }, 1000);
+                        
+                    });
                     object.parent().append(link);
                 }else{
                     $(\'#\'+socialMedia+\'-login-link\').remove();
