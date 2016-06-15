@@ -60,11 +60,6 @@ use yii\widgets\ActiveForm;
                 <?php $index = 0; ?>
                 <?php foreach ($actionFields as $actionField): ?>
                     <tr>
-                        <th colspan="5">
-                            <?php var_dump($actionField->errors); ?>
-                        </th>
-                    </tr>
-                    <tr>
                         <td><?= $form->field($actionField, 'name')->textInput(['name' => "ActionFields[$index][name]"])->label(false); ?></td>
                         <td><?= $form->field($actionField, 'label')->textInput(['name' => "ActionFields[$index][label]"])->label(false); ?></td>
                         <td><?= $form->field($actionField, 'type')->dropDownList([ActionFields::TYPE_TEXT => Yii::t('actionFields', 'Text'), ActionFields::TYPE_CHECKBOX => Yii::t('ActionFields', 'Checkbox')], ['name' => "ActionFields[$index][type]"])->label(false) ?></td>
