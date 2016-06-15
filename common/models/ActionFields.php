@@ -43,7 +43,6 @@ class ActionFields extends \common\components\db\ActiveRecord
     {
         return [
             [['name', 'label'], 'required'],
-            [['required', 'type'], 'integer'],
             [['label','name'], 'string', 'max' => 128],
             [['required', 'type'], 'default', 'value' => false]
             //[['action_id'], 'exist', 'skipOnError' => true, 'targetClass' => Action::className(), 'targetAttribute' => ['action_id' => 'id']],
