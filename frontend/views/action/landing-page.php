@@ -21,7 +21,7 @@ use yii\helpers\Html;
         <div class="form-group">
         <?= nl2br($model->description); ?>
     </div>
-        <?php if (!$landingPageModel->validate()): ?>
+        <?php if (!is_null($landingPageModel)): ?>
             <div class="form-group">
                 <?php if (!empty($landingPageModel)): ?>
                     <?php $form = ActiveForm::begin(['options' => ['class' => 'form-horizontal']]); ?>

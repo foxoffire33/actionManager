@@ -62,26 +62,24 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <div class="row">
         <?php if (!empty($model->actionFields)): ?>
-            <?php $actionFieldValuesHtml = ''; ?>
-            <table class="table-striped table" style="width: 100%">
-                <thead>
-                <tr>
-                    <?php foreach ($model->actionFields as $actionField): ?>
-                        <th><?= $actionField->label ?></th>
-                        <?php if (!empty($actionField->actionFieldsValues)): ?>
-                            <?php $actionFieldValuesHtml .= '<tr>'; ?>
-                            <?php foreach ($actionField->actionFieldsValues as $actionFieldValue) {
-                                $actionFieldValuesHtml .= "<td>$actionFieldValue->value</td>";
-                            }
-                            $actionFieldValuesHtml .= "</tr>";
-                            ?>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                </tr>
-                </thead>
-                <tbody><?= $actionFieldValuesHtml ?></tbody>
-            </table>
+            <?php $count = round(count($model->actionFields)); ?>
+            <?php $actionFieldValuesHtml = '';
+            $reactionID = '' ?>
+            <?php foreach ($model->actionFields as $actionField): ?>
+                <div class=" col-sm-<?= round(12 / $count); ?>">
+                    <h4 style="text-align: center"><strong><?= $actionField->label ?></strong></h4>
+                    <?php if (!empty($actionField->actionFieldsValues)): ?>
+                        <ul class="group-list">
+                            <?php foreach ($actionField->actionFieldsValues as $actionFieldValue): ?>
+                                <li class="list-group-item">
+                                    <?= $actionFieldValue->value ?>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
         <?php endif; ?>
-    </div>
+        </ul>
 
-</div>
+    </div>

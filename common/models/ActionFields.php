@@ -105,6 +105,6 @@ class ActionFields extends \common\components\db\ActiveRecord
      */
     public function getActionFieldsValues()
     {
-        return $this->hasMany(ActionFieldsValue::className(), ['action_field_id' => 'id']);
+        return $this->hasMany(ActionFieldsValue::className(), ['action_field_id' => 'id'])->orderBy('reaction_id');
     }
 }

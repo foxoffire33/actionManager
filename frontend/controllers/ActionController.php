@@ -202,7 +202,8 @@ class ActionController extends Controller
                     $newActionFieldValue->value = $landingPageModel->$attribute;
                     $newActionFieldValue->save();
                 }
-                $landingPageModel = $this->setupDynapmicModel($model->actionFields);
+                $landingPageModel = null;
+                //$landingPageModel = $this->setupDynapmicModel($model->actionFields);
                 Yii::$app->session->setFlash('success', Yii::t('landing', 'Thanks'));
             }
             return $this->render('landing-page', ['model' => $model, 'landingPageModel' => $landingPageModel]);
