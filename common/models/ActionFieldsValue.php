@@ -33,9 +33,7 @@ class ActionFieldsValue extends \common\components\db\ActiveRecord
     public function rules()
     {
         return [
-            ['ip', 'default', 'value' => Yii::$app->request->userIP],
             [['value'], 'string'],
-            ['ip', 'safe']
             //  [['action_field_id'], 'exist', 'skipOnError' => true, 'targetClass' => ActionFields::className(), 'targetAttribute' => ['action_field_id' => 'id']],
         ];
     }

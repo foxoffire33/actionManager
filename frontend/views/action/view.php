@@ -61,10 +61,9 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
     <div class="row">
-        <?php if (!empty($model->actionFields)): ?>
-            <table class="table table-striped">
-                <?php $actionFieldValuesHtml = '';
-                $reactionID = '' ?>
+        <table class="table table-striped">
+            <?php //var_dump($model->reactions[17]->actionFieldsValue);exit; ?>
+            <?php if (!empty($model->actionFields)): ?>
                 <thead>
                 <tr>
                     <?php foreach ($model->actionFields as $actionField): ?>
@@ -72,20 +71,21 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php endforeach; ?>
                 <tr>
                 </thead>
-                <tbody> <?php if (!empty($actionField->actionFieldsValues)): ?>
+            <?php endif; ?>
+            <tbody>
+            <?php if (!empty($model->reactions)): ?>
+                <?php foreach ($model->reactions as $reaction): ?>
                     <tr>
-                    <?php foreach ($actionField->actionFieldsValues as $actionFieldsValue): ?>
-
-                        <?php if ($reactionID !== $actionFieldsValue->reaction_id): ?>
-                            <?php $reactionID = $actionFieldsValue->reaction_id; ?>
-                            </tr><tr>
+                        <?php if (!empty($reaction->actionFieldsValue)): ?>
+                            <?php foreach ($reaction->actionFieldsValue as $actionFieldValue): ?>
+                                <td><?= $actionFieldValue->value ?></td>
+                            <?php endforeach; ?>
                         <?php endif; ?>
-                        <td><?= $actionFieldsValue->value ?></td>
-                    <?php endforeach; ?>
                     </tr>
-                <?php endif; ?></tbody>
-            </table>
-        <?php endif; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
+            </tbody>
+        </table>
         </ul>
 
     </div>

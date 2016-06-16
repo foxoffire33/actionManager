@@ -188,12 +188,16 @@ class Action extends \common\components\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'updated_by']);
     }
+    
+    public function getReactions(){
+        return $this->hasMany(Reaction::className(),['action_id' => 'id']); 
+    }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getActionFields()
     {
-        return $this->hasMany(ActionFields::className(), ['action_id' => 'id']);
+        return $this->hasMany(ActionFields::className(), ['action_id' => 'id'])->orderBy('id');
     }
 }

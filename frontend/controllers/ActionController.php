@@ -5,7 +5,9 @@ namespace frontend\controllers;
 use common\models\Action;
 use common\models\ActionFields;
 use common\models\ActionFieldsValue;
+use common\models\Reaction;
 use common\models\search\ActionSearch;
+use frontend\components\authClient\AuthHandler;
 use frontend\components\web\ImageHelper;
 use Yii;
 use yii\base\DynamicModel;
@@ -17,7 +19,6 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use frontend\components\authClient\AuthHandler;
 
 /**
  * ActionController implements the CRUD actions for Action model.
@@ -191,19 +192,19 @@ class ActionController extends Controller
             $this->view->params['organization_name'] = ucfirst($model->organization->name);
             $landingPageModel = $this->setupDynapmicModel($model->actionFields);
             if ($landingPageModel->load(Yii::$app->request->post()) && $landingPageModel->validate()) {
-
-                $query = new Query();
-                $queryResult = $query->select('reaction_id')->orderBy('reaction_id DESC')->from(ActionFieldsValue::tableName())->one();
-                $result = intval($queryResult['reaction_id']) + 1;
-                foreach ($landingPageModel->attributes() as $attribute) {
-                    $newActionFieldValue = new ActionFieldsValue();
-                    $newActionFieldValue->reaction_id = $result;
-                    $newActionFieldValue->action_field_id = ActionFields::findOne(['action_id' => $id, 'label' => $attribute])->id;
-                    $newActionFieldValue->value = $landingPageModel->$attribute;
-                    $newActionFieldValue->save();
+                $reaction = new Reaction();
+                $reaction->ip = Yii::$app->request->userIP;
+                $reaction->action_id = $id;
+                if ($reaction->save()) {
+                    foreach ($landingPageModel->attributes() as $attribute) {
+                        $newActionFieldValue = new ActionFieldsValue();
+                        $newActionFieldValue->reaction_id = $reaction->id;
+                        $newActionFieldValue->action_field_id = ActionFields::findOne(['action_id' => $id, 'label' => $attribute])->id;
+                        $newActionFieldValue->value = $landingPageModel->$attribute;
+                        $newActionFieldValue->save();
+                    }
                 }
                 $landingPageModel = null;
-                //$landingPageModel = $this->setupDynapmicModel($model->actionFields);
                 Yii::$app->session->setFlash('success', Yii::t('landing', 'Thanks'));
             }
             return $this->render('landing-page', ['model' => $model, 'landingPageModel' => $landingPageModel]);
