@@ -3,6 +3,7 @@
 namespace common\models;
 
 use common\components\helpers\FileHelper;
+use common\models\search\ActionFieldsValue;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
@@ -194,10 +195,5 @@ class Action extends \common\components\db\ActiveRecord
     public function getActionFields()
     {
         return $this->hasMany(ActionFields::className(), ['action_id' => 'id']);
-    }
-
-    private function getAllAndFilter($filter = [])
-    {
-        return array_diff(array_keys($this->attributes), $filter);
     }
 }

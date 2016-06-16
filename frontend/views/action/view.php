@@ -62,23 +62,29 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <div class="row">
         <?php if (!empty($model->actionFields)): ?>
-            <?php $count = round(count($model->actionFields)); ?>
-            <?php $actionFieldValuesHtml = '';
-            $reactionID = '' ?>
-            <?php foreach ($model->actionFields as $actionField): ?>
-                <div class=" col-sm-<?= round(12 / $count); ?>">
-                    <h4 style="text-align: center"><strong><?= $actionField->label ?></strong></h4>
-                    <?php if (!empty($actionField->actionFieldsValues)): ?>
-                        <ul class="group-list">
-                            <?php foreach ($actionField->actionFieldsValues as $actionFieldValue): ?>
-                                <li class="list-group-item">
-                                    <?= $actionFieldValue->value ?>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    <?php endif; ?>
-                </div>
-            <?php endforeach; ?>
+            <table class="table table-striped">
+                <?php $actionFieldValuesHtml = '';
+                $reactionID = '' ?>
+                <thead>
+                <tr>
+                    <?php foreach ($model->actionFields as $actionField): ?>
+                        <th><?= $actionField->label ?></th>
+                    <?php endforeach; ?>
+                <tr>
+                </thead>
+                <tbody> <?php if (!empty($actionField->actionFieldsValues)): ?>
+                    <tr>
+                    <?php foreach ($actionField->actionFieldsValues as $actionFieldsValue): ?>
+
+                        <?php if ($reactionID !== $actionFieldsValue->reaction_id): ?>
+                            <?php $reactionID = $actionFieldsValue->reaction_id; ?>
+                            </tr><tr>
+                        <?php endif; ?>
+                        <td><?= $actionFieldsValue->value ?></td>
+                    <?php endforeach; ?>
+                    </tr>
+                <?php endif; ?></tbody>
+            </table>
         <?php endif; ?>
         </ul>
 
