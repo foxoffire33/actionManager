@@ -16,6 +16,7 @@ class m160614_090541_oauth extends Migration
             'updated_at' => $this->integer(),
             'created_by' => $this->integer(),
             'updated_by' => $this->integer(),
+            'deleted)at' => $this->integer()
         ]);
 
        $this->addForeignKey('auth_user_id_fk','token','user_id','user','id','CASCADE','NO ACTION');
