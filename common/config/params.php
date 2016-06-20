@@ -1,4 +1,5 @@
 <?php
+Yii::setAlias('@uploadPath', './');
 return [
     'appName' => 'ActionManager',
     'adminEmail' => 'admin@example.com',

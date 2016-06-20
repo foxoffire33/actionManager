@@ -62,7 +62,7 @@ use yii\widgets\ActiveForm;
                     <tr>
                         <td><?= $form->field($actionField, 'name')->textInput(['name' => "ActionFields[$index][name]"])->label(false); ?></td>
                         <td><?= $form->field($actionField, 'label')->textInput(['name' => "ActionFields[$index][label]"])->label(false); ?></td>
-                        <td><?= $form->field($actionField, 'type')->dropDownList([ActionFields::TYPE_TEXT => Yii::t('actionFields', 'Text'), ActionFields::TYPE_CHECKBOX => Yii::t('ActionFields', 'Checkbox')], ['name' => "ActionFields[$index][type]"])->label(false) ?></td>
+                        <td><?= $form->field($actionField, 'type')->dropDownList([ActionFields::TYPE_TEXT => Yii::t('actionFields', 'Text'), ActionFields::TYPE_CHECKBOX => Yii::t('actionFields', 'Checkbox')], ['name' => "ActionFields[$index][type]"])->label(false) ?></td>
                         <td><?= $form->field($actionField, 'required', ['template' => '{input}'])->checkBox(['name' => "ActionFields[$index][required]"], false); ?></td>
                         <td><?= $form->field($actionField, 'id')->hiddenInput(['name' => "ActionFields[$index][id]"])->label(false) ?>
                             <?= Html::a('<span class="glyphicon glyphicon-trash"></span>', '#', ['class' => 'remove-invoice-line']) ?></td>
@@ -171,11 +171,24 @@ name: \'ActionFields[\' + nextIndex + \'][\' + attribute + \']\'
     }
 
     function checkBox(attribute){
-        return $(\'<input />\').attr({
+    
+        $div = $(\'<div />\');
+        
+        $div.append($(\'<input />\').attr({
+                id: \'ActionFields\' + nextIndex + \'-\' + attribute.toLowerCase(),
+                type: \'hidden\',
+                name: \'ActionFields[\' + nextIndex + \'][\' + attribute + \']\',
+                value: 0
+        }));
+    
+        $div.append( $(\'<input />\').attr({
                 id: \'ActionFields\' + nextIndex + \'-\' + attribute.toLowerCase(),
                 type: \'checkbox\',
-                name: \'ActionFields[\' + nextIndex + \'][\' + attribute + \']\'
-            });
+                name: \'ActionFields[\' + nextIndex + \'][\' + attribute + \']\',
+                value: 1
+            }));
+            
+            return $div;
     }
 
     function formGroup(attribute, input)
