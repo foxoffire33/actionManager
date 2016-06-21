@@ -22,7 +22,7 @@ return [
     'Account created' => 'Account aangemaakt',
     'We send a password to {email}' => 'We hebben uw wachwoord naar {email} gestuurd',
     //mail
-    'Welcome to {appName}, this are your login data' => 'Welkom bij {appName}, dit zijn uw login gegevens',
+    'Welcome to {appName}, this is your login data' => 'Welkom bij {appName}, dit zijn uw login gegevens',
     'Username: {username}' => 'Gebruikersnaam: {username}',
     'Password: {password}' => 'Wachtwoord: {password}'
 ];

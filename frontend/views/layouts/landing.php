@@ -24,16 +24,8 @@ AppAsset::register($this);
 <?php $this->beginBody() ?>
 
 <div class="wrap">
-    <?php
-    NavBar::begin([
-        'brandLabel' => Html::img($this->params['organization_logo'], ['class' => 'img', 'height' => 50]),
-        'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
-            'style' => 'height: 75px',
-        ],
-    ]);
-    NavBar::end();
-    ?>
+    <?= Html::img($this->params['organization_logo'], ['class' => 'img', 'height' => 50, 'align' => 'middle']);
+            ?>
     <div class="container">
         <?= Alert::widget() ?>
         <?= $content; ?>

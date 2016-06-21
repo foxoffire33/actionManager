@@ -7,12 +7,12 @@ use yii\helpers\Html;
 ?>
 <div class="col-xs-12">
     <div class="row">
-        <h1>
-            <?php if (!empty($model->image)): ?>
-                <?= Html::img(ImageHelper::convertToBase64($model->image), ['class' => 'img-rounded img-circle', 'height' => 120]) ?>
-            <?php endif; ?>
+        <h1>            
             <?= $model->name ?>
         </h1>
+        <?php if (!empty($model->image)): ?>
+                <?= Html::img(ImageHelper::convertToBase64($model->image), ['height' => 400, 'align' => 'center']) ?>
+            <?php endif; ?>
     </div>
     <div>
         <div class="form-group">
