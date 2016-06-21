@@ -19,7 +19,7 @@ NavBar::begin([
 $menuItems = [];
 if (!Yii::$app->user->isGuest) {
     $menuItems[] = ['label' => Yii::t('menu', 'Action'), 'url' => ['/action/index']];
-    $menuItems[] = ['label' => Yii::t('menu', 'Logout ({username})', ['username' => Yii::$app->user->identity->username]), 'url' => ['/user/logout']];
+    $menuItems[] = ['label' => Yii::t('menu', 'Logout ({username})', ['username' => Yii::$app->user->identity->email]), 'url' => ['/user/logout']];
 } else {
     $menuItems[] = ['label' => Yii::t('menu', 'Home'), 'url' => ['/site/index']];
     $menuItems[] = ['label' => Yii::t('menu', 'Registration'), 'url' => ['/user/registration']];

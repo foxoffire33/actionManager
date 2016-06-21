@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="user-login">
 	<?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
 	<h2>Meld je aan</h2>
-	<?= $form->field($model, 'username', ['inputOptions' => ['placeholder' => Module::t('login', 'Username')]])->label(false) ?>
+	<?= $form->field($model, 'email', ['inputOptions' => ['placeholder' => Module::t('login', 'Email')]])->label(false) ?>
 	<?= $form->field($model, 'password', ['inputOptions' => ['placeholder' => Module::t('login', 'Password')]])->passwordInput()->label(false) ?>
 	<!--<?= $form->field($model, 'rememberMe')->checkbox() ?>-->
 	<div class="form-group">

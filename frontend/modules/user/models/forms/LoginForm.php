@@ -12,7 +12,7 @@ use \yii\base\Model;
 class LoginForm extends Model
 {
 	/** @var */
-	public $username;
+	public $email;
 	/** @var */
 	public $password;
 	/** @var bool */
@@ -27,7 +27,7 @@ class LoginForm extends Model
 	public function rules()
 	{
 		return [
-			[['username', 'password'], 'required'], // username and password are both required
+			[['email', 'password'], 'required'], // username and password are both required
 			['rememberMe', 'boolean'], // rememberMe must be a boolean value
 			['password', 'validatePassword'], // password is validated by validatePassword()
 		];
@@ -45,13 +45,13 @@ class LoginForm extends Model
 		if (!$this->hasErrors()) {
 			$user = $this->getUser();
 			if (!$user || !$user->validatePassword($this->password)) {
-				$this->addError($attribute, Module::t('user', 'Incorrect username or password.'));
+				$this->addError($attribute, Module::t('user', 'Incorrect email or password.'));
 			}
 		}
 	}
 
 	/**
-	 * Logs in a user using the provided username and password.
+	 * Logs in a user using the provided email and password.
 	 *
 	 * @return boolean whether the user is logged in successfully
 	 */
@@ -72,7 +72,7 @@ class LoginForm extends Model
 	public function getUser()
 	{
 		if ($this->_user === false) {
-			$this->_user = User::findByUsername($this->username);
+			$this->_user = User::findByEmail($this->email);
 		}
 
 		return $this->_user;
@@ -84,7 +84,7 @@ class LoginForm extends Model
 	public function attributeLabels()
 	{
 		return [
-			'username'   => Module::t('login', 'Username'),
+			'email'   => Module::t('login', 'Email'),
 			'password'   => Module::t('login', 'Password'),
 			'rememberMe' => Module::t('login', 'Remember Me'),
 		];

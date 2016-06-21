@@ -17,7 +17,6 @@ class SignupForm extends Model
     public $logo;
     public $description;
     //user
-    public $username;
     public $password;
     public $email;
     //for redirect
@@ -33,13 +32,12 @@ class SignupForm extends Model
     public function rules()
     {
         return [
-            [['name', 'address', 'city', 'username'], 'required'],
+            [['name', 'address', 'city'], 'required'],
             //email validatetion
             [['email'], 'required'],
             ['email', 'email'],
             //unique
             ['email', 'unique', 'targetClass' => User::className(), 'targetAttribute' => 'email'],
-            ['username', 'unique', 'targetClass' => User::className(), 'targetAttribute' => 'username'],
             ['name', 'unique', 'targetClass' => Organization::className(), 'targetAttribute' => 'name'],
             //safe
             [['description','logo'], 'safe'],
@@ -73,7 +71,6 @@ class SignupForm extends Model
             }
             //set user fields
             $user->setAttributes([
-                'username' => $this->username,
                 'email' => $this->email,
                 'password_hash' => Yii::$app->security->generatePasswordHash($this->password),
                 'auth_key' => Yii::$app->security->generateRandomKey(30)
@@ -116,7 +113,6 @@ class SignupForm extends Model
             'logo' => Module::t('signupForm', 'Logo'),
             'description' => Module::t('signupForm', 'Description'),
             //user account
-            'username' => Module::t('signupForm', 'Username'),
             'email' => Module::t('signupForm', 'Email'),
         ];
     }

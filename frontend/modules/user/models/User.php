@@ -51,10 +51,10 @@ class User extends \common\models\User
     public function rules()
     {
         return [
-            ['username', 'required'],
-            ['username', 'trim'],
+            ['email', 'required'],
+            ['email', 'trim'],
             ['email', 'email'],
-            [['username', 'email'], 'unique'],
+            [['email'], 'unique'],
 
             ['enter_password', 'required', 'on' => ['set_password', 'changePassword']],
             ['enter_password', 'string', 'min' => 8, 'max' => 255, 'on' => ['set_password', 'changePassword']],
@@ -75,7 +75,6 @@ class User extends \common\models\User
     {
         return [
             'id' => Module::t('user', 'ID'),
-            'username' => Module::t('user', 'Username'),
             'email' => Module::t('user', 'E-mail'),
             'password' => Module::t('user', 'Password'),
             'enter_password' => Module::t('user', 'Enter Password'),
