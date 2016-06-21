@@ -13,6 +13,7 @@ return [
     //attributes
     'Name' => 'Naam',
     'Address' => 'Adres',
+    'Postal' => 'Postcode',
     'City' => 'Plaats',
     'Logo' => 'Logo',
     'Username' => 'Gebruikersnaam',

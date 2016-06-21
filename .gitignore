@@ -5,6 +5,9 @@
 .idea
 
 uploads
+/frontend/web/*.png
+/frontend/web/*.jpg
+/frontend/web/*.jpeg
 
 # netbeans project files
 nbproject

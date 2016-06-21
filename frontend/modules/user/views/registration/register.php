@@ -9,8 +9,17 @@ use frontend\modules\user\Module;
     <div class="row">
         <?= $form->field($model,'email')->textInput(); ?>
         <?= $form->field($model, 'name')->textInput(); ?>
+        <div class="form-group">
         <?= $form->field($model, 'address')->textInput(); ?>
-        <?= $form->field($model, 'city')->textInput(); ?>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <?= $form->field($model, 'postal')->textInput(); ?>
+            </div>
+            <div class="col-sm-8">
+                <?= $form->field($model, 'city')->textInput(); ?>
+            </div>
+        </div>
         <?= $form->field($model, 'logo')->fileInput(); ?>
         <?= $form->field($model, 'description')->textarea(); ?>
     </div>

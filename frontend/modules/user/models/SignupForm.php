@@ -16,6 +16,7 @@ class SignupForm extends Model
     public $city;
     public $logo;
     public $description;
+    public $postal;
     //user
     public $password;
     public $email;
@@ -32,7 +33,7 @@ class SignupForm extends Model
     public function rules()
     {
         return [
-            [['name', 'address', 'city'], 'required'],
+            [['name', 'address', 'city','postal'], 'required'],
             //email validatetion
             [['email'], 'required'],
             ['email', 'email'],
@@ -43,6 +44,8 @@ class SignupForm extends Model
             [['description','logo'], 'safe'],
             //save logo
             ['logo', 'file', 'extensions' => ['jpg', 'jpeg', 'png'],'skipOnEmpty' => false],
+            //postcode
+            ['postal', 'edofre\validators\ZipCodeValidator'],
         ];
     }
 
@@ -61,6 +64,7 @@ class SignupForm extends Model
             $organization->setAttributes([
                 'name' => $this->name,
                 'address' => $this->address,
+                'postal' => $this->postal,
                 'city' => $this->city,
                 'description' => $this->description
             ]);
@@ -109,6 +113,7 @@ class SignupForm extends Model
             //organization
             'name' => Module::t('signupForm', 'Name'),
             'address' => Module::t('signupForm', 'Address'),
+            'postal' => Module::t('signupForm', 'Postal'),
             'city' => Module::t('signupForm', 'City'),
             'logo' => Module::t('signupForm', 'Logo'),
             'description' => Module::t('signupForm', 'Description'),
