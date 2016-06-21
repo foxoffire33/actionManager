@@ -58,7 +58,8 @@ sed -i 's/user www-data/user vagrant/g' /etc/nginx/nginx.conf
 echo "Done!"
 
 info "Enabling site configuration"
-ln -s /app/vagrant/nginx/app.conf /etc/nginx/sites-enabled/app.conf
+ln -s /app/vagrant/nginx/vhosts/backend.conf /etc/nginx/sites-enabled/backend.conf
+ln -s /app/vagrant/nginx/vhosts/frontend.conf /etc/nginx/sites-enabled/frontend.conf
 echo "Done!"
 
 info "Initailize databases for MySQL"
