@@ -35,11 +35,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'updated_at:datetime',
             'created_by' => [
                 'attribute' => 'created_by',
-                'value' => $model->createdBy->username
+                'value' => $model->createdBy->email
             ],
             'updated_by' => [
                 'attribute' => 'updated_by',
-                'value' => $model->updatedBy->username
+                'value' => $model->updatedBy->email
             ],
         ],
     ]) ?>
