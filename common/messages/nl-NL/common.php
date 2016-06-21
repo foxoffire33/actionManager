@@ -62,4 +62,5 @@ return [
 	/** Misc */
 	'Conditions'                                 => 'Voorwaarden',
 	'Disclaimer'                                 => 'Disclaimer',
+	'View landings page'						=> 	'Bekijk landings pagina'
 ];

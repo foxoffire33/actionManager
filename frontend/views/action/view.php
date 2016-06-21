@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a(Yii::t('common', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('common', 'View'), ['action/landing-page', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('common', 'View landings page'), ['action/landing-page', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
         <?= Html::a(Yii::t('common', 'Delete'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
@@ -47,17 +47,23 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-sm-12">
             <h3>Action</h3>
-            <?= Html::img(ImageHelper::convertToBase64($model->image), ['alt' => 'image', 'class' => 'img-responsive img-rounded']); ?>
+            <?php if(!empty($model->image)): ?>
+                <?= Html::img(ImageHelper::convertToBase64($model->image), ['alt' => 'image', 'class' => 'img-responsive img-rounded']); ?>
+            <?php endif; ?>
             <p><?= nl2br($model->description); ?></p>
         </div>
         <div class="col-sm-4">
             <h3>Facebook</h3>
-            <?= Html::img(ImageHelper::convertToBase64($model->image_facebook), ['alt' => 'facebook image', 'class' => 'img-responsive img-rounded']); ?>
+            <?php if(!empty($model->image_facebook)): ?>
+                <?= Html::img(ImageHelper::convertToBase64($model->image_facebook), ['alt' => 'facebook image', 'class' => 'img-responsive img-rounded']); ?>
+            <?php endif; ?>
             <p><?= nl2br($model->description_facebook); ?></p>
         </div>
         <div class="col-sm-4">
             <h3>Twitter</h3>
-            <?= Html::img(ImageHelper::convertToBase64($model->image_twitter), ['alt' => 'twitter image', 'class' => 'img-responsive img-rounded']); ?>
+            <?php if(!empty($model->image_twitter)): ?>
+                <?= Html::img(ImageHelper::convertToBase64($model->image_twitter), ['alt' => 'twitter image', 'class' => 'img-responsive img-rounded']); ?>
+            <?php endif; ?>
             <p><?= nl2br($model->description_twitter); ?></p>
         </div>
     </div>
