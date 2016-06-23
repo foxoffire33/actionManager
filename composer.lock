@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "48d443177236f716ccf3d675b0b9832e",
-    "content-hash": "369c73814f2cc3916c96ffeb7922183a",
+    "hash": "9cddbe7d7e03885a38831b41820db3ed",
+    "content-hash": "b2b21955925b9a0bdd747f33f4410fd7",
     "packages": [
         {
             "name": "abraham/twitteroauth",
@@ -335,50 +335,6 @@
             "time": "2015-03-06 05:28:07"
         },
         {
-            "name": "edofre/yii2-validators",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Edofre/yii2-validators.git",
-                "reference": "593d224a5be90a65191a6c28af862156ed945b63"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Edofre/yii2-validators/zipball/593d224a5be90a65191a6c28af862156ed945b63",
-                "reference": "593d224a5be90a65191a6c28af862156ed945b63",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.5.0",
-                "yiisoft/yii2": "*"
-            },
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-4": {
-                    "edofre\\validators\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Edo Freriks",
-                    "email": "edofre@gmail.com"
-                }
-            ],
-            "description": "Yii2 frequently used validators",
-            "homepage": "https://github.com/edofre/yii2-validators",
-            "keywords": [
-                "price",
-                "validator",
-                "validators",
-                "zipcode"
-            ],
-            "time": "2016-06-10 22:13:59"
-        },
-        {
             "name": "ezyang/htmlpurifier",
             "version": "v4.7.0",
             "source": {
@@ -536,12 +492,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-select2.git",
-                "reference": "00c29bf2ea42df7be2ae6aa2b2be049807a8134b"
+                "reference": "5ca33a716188422e85560cdce0cb2110a998a618"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/kartik-v/yii2-widget-select2/zipball/5ca33a716188422e85560cdce0cb2110a998a618",
-                "reference": "00c29bf2ea42df7be2ae6aa2b2be049807a8134b",
+                "reference": "5ca33a716188422e85560cdce0cb2110a998a618",
                 "shasum": ""
             },
             "require": {
@@ -581,7 +537,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2016-06-03 10:10:39"
+            "time": "2016-06-14 13:48:39"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -1286,8 +1242,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "kartik-v/yii2-widget-select2": 20,
-        "edofre/yii2-validators": 20
+        "kartik-v/yii2-widget-select2": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

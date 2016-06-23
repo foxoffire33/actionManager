@@ -3,10 +3,10 @@ namespace frontend\modules\user\models;
 
 use common\models\Organization;
 use common\models\User;
+use frontend\modules\user\Module;
 use Yii;
 use yii\base\Model;
 use yii\web\UploadedFile;
-use frontend\modules\user\Module;
 
 class SignupForm extends Model
 {
@@ -33,7 +33,7 @@ class SignupForm extends Model
     public function rules()
     {
         return [
-            [['name', 'address', 'city','postal'], 'required'],
+            [['name', 'address', 'city', 'postal'], 'required'],
             //email validatetion
             [['email'], 'required'],
             ['email', 'email'],
@@ -41,11 +41,11 @@ class SignupForm extends Model
             ['email', 'unique', 'targetClass' => User::className(), 'targetAttribute' => 'email'],
             ['name', 'unique', 'targetClass' => Organization::className(), 'targetAttribute' => 'name'],
             //safe
-            [['description','logo'], 'safe'],
+            [['description', 'logo'], 'safe'],
             //save logo
-            ['logo', 'file', 'extensions' => ['jpg', 'jpeg', 'png'],'skipOnEmpty' => false],
+            ['logo', 'file', 'extensions' => ['jpg', 'jpeg', 'png'], 'skipOnEmpty' => false],
             //postcode
-            ['postal', 'edofre\validators\ZipCodeValidator'],
+            ['postal', 'match', 'pattern' => '/^[0-9]{4} {0,1}[a-z|A-Z]{2}$/'],
         ];
     }
 
@@ -82,7 +82,7 @@ class SignupForm extends Model
 
             if ($user->save()) {
                 //add to rule member
-                 $auth = Yii::$app->authManager;
+                $auth = Yii::$app->authManager;
                 $authorRole = $auth->getRole('member');
                 $auth->assign($authorRole, $user->getId());
                 //set user id by organization
