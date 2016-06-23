@@ -43,7 +43,7 @@ class SignupForm extends Model
             //safe
             [['description', 'logo'], 'safe'],
             //save logo
-            ['logo', 'file', 'extensions' => ['jpg', 'jpeg', 'png'], 'skipOnEmpty' => false],
+            ['logo', 'file', 'extensions' => ['jpg', 'jpeg', 'png'], 'skipOnEmpty' => true],
             //postcode
             ['postal', 'match', 'pattern' => '/^[0-9]{4} {0,1}[a-z|A-Z]{2}$/'],
         ];
@@ -68,10 +68,12 @@ class SignupForm extends Model
                 'city' => $this->city,
                 'description' => $this->description
             ]);
-            //save uploaded file
-            $saveName = $this->getnewLogoName(rand(1000, 9000), $this->logo->extension);
-            if ($this->logo->saveAs(Yii::getAlias('@uploadPath') . '/' . $saveName)) {
-                $organization->logo = $saveName;
+            if (!empty($this->logo)) {
+                //save uploaded file
+                $saveName = $this->getnewLogoName(rand(1000, 9000), $this->logo->extension);
+                if ($this->logo->saveAs(Yii::getAlias('@uploadPath') . '/' . $saveName)) {
+                    $organization->logo = $saveName;
+                }
             }
             //set user fields
             $user->setAttributes([
